@@ -9,9 +9,10 @@ Static HTML site for the **Edexcel GCSE Computer Science (1CP2) String Manipulat
 ## Architecture
 
 - **No build system, no framework** — plain HTML files served directly. Each lesson is a single self-contained `.html` file with inline `<style>` and `<script>` blocks.
-- `index.html` — landing page with lesson grid; links to `lesson1.html` through `lesson6.html`.
-- Lessons share a consistent dark-theme design system via CSS custom properties (`--bg`, `--card`, `--accent1`–`--accent6`, `--mono`, `--body`) duplicated in each file.
+- `index.html` — landing page with lesson grid; links to `lesson1.html` through `lesson6.html`. Contains branding for "Haute Vallee School - Dr Galan" in the title and hero section.
+- Lessons share a consistent dark-theme design system via CSS custom properties duplicated in each file. **Note:** `index.html` uses `--accent1` through `--accent6`, while lesson files use shorthand names (`--accent`, `--accent2`, `--accent3`). Both share `--bg`, `--card`, `--text`, `--muted`, `--mono`, `--body`.
 - Fonts loaded from Google Fonts: Space Mono (code/UI) and Nunito (body text).
+- Code blocks use manual syntax-highlighting spans: `.kw` (keywords), `.fn` (functions), `.str` (strings), `.cm` (comments), `.num` (numbers), `.var` (variables).
 
 ## Lesson Structure
 
@@ -33,6 +34,13 @@ All interactivity is vanilla JS within a `<script>` block at the bottom of each 
 
 Lessons 1–2 provide full code; Lessons 3–4 have partial code with gaps/bugs; Lessons 5–6 provide minimal or no code. The support level is indicated by colored pills (green → yellow → red).
 
+## Key Constraints
+
+- **No shared CSS/JS files.** Every lesson duplicates styles and scripts. Changes to shared patterns (nav, quiz logic, memory game, code copy, color variables) must be applied to each affected file individually.
+- `lesson6.html` exists in the file listing but may lack some interactive activity types present in earlier lessons (by design — minimal scaffolding).
+- Quiz feedback messages are hardcoded per question per lesson. Each lesson's `answer()` function contains its own `msgs` object with feedback strings.
+- Fill-in-the-blank answers support alternatives via the `alt` array in the `blanks` config.
+
 ## Development
 
-Open `index.html` directly in a browser — no server required. To preview changes, refresh the browser. When editing styles or JS patterns, note they are duplicated across all lesson files.
+Open `index.html` directly in a browser — no server required. To preview changes, refresh the browser.

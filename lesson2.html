@@ -87,6 +87,15 @@
   .slicer-controls input{background:rgba(255,255,255,0.07);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:0.85rem;padding:6px 10px;border-radius:6px;width:70px;text-align:center;}
   .slicer-result{font-family:var(--mono);font-size:1rem;color:var(--accent);background:rgba(255,217,61,0.08);border:1px solid rgba(255,217,61,0.2);border-radius:8px;padding:12px 16px;margin-bottom:8px;}
   .slicer-code{font-family:var(--mono);font-size:0.8rem;color:var(--muted);}
+  /* MEMORY GAME */
+  .memory-grid{display:grid;gap:10px;margin-bottom:12px;}
+  .mem-card{aspect-ratio:1;border-radius:10px;border:1px solid var(--border);background:var(--card2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-family:var(--mono);text-align:center;padding:6px;transition:all 0.25s;color:transparent;position:relative;overflow:hidden;}
+  .mem-card::before{content:attr(data-front);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:6px;color:var(--muted);font-size:0.6rem;opacity:0;transition:opacity 0.2s;}
+  .mem-card.flipped{background:rgba(255,217,61,0.1);border-color:rgba(255,217,61,0.4);}
+  .mem-card.flipped::before{opacity:1;}
+  .mem-card:not(.flipped)::after{content:'?';position:absolute;font-size:1.2rem;color:var(--muted);opacity:0.4;}
+  .mem-card.matched-m{background:rgba(107,203,119,0.1);border-color:rgba(107,203,119,0.4);pointer-events:none;}
+  .mem-card.matched-m::before{color:var(--accent3);}
   ::-webkit-scrollbar{width:6px;height:6px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px;}
 </style>
 </head>
@@ -149,8 +158,19 @@
 <!-- CODE WITH GAPS -->
 <div class="section-title">💻 Starter Code — Fill the Gaps <span class="pill">ACTIVITY 3</span></div>
 <div class="info-box green">
-  <b>📁 Create input.txt with these lines:</b><br>
-  <code style="font-family:var(--mono);">Hello World<br>Python Programming<br>GCSE Computer Science<br>Jersey Channel Islands</code>
+  <b>📁 Create input.txt</b> — Open Notepad, paste the text below, and save as <code style="font-family:var(--mono);">input.txt</code> in the same folder as your Python file.
+</div>
+<div class="code-block">
+  <div class="code-header">
+    <span class="code-lang">TEXT — input.txt</span>
+    <button class="copy-btn" onclick="copyCode(this,'txtfile2')">Copy</button>
+  </div>
+  <pre id="txtfile2">Hello World
+Python Programming
+GCSE Computer Science
+Jersey Channel Islands
+The cat sat on the mat
+Edexcel 1CP2 Specification</pre>
 </div>
 <div class="info-box yellow">
   <b>Your task:</b> The code below has gaps — work out what goes in each <code style="font-family:var(--mono);color:var(--accent);">___</code> gap. Hints are in the comments. Once you figure it out, type it in IDLE and run it!
@@ -258,6 +278,77 @@ myfile.close()</div>
   <div class="quiz-feedback" id="fb-q4"></div>
 </div>
 
+<hr class="divider">
+
+<!-- PREDICT THE OUTPUT -->
+<div class="section-title">🔮 Predict the Output <span class="pill">ACTIVITY 6</span></div>
+<p style="color:var(--muted);font-size:0.88rem;margin-bottom:16px;">Look at each code snippet and predict what will be printed. Click to reveal!</p>
+
+<div class="quiz-card">
+  <div class="quiz-q">What does this print?<br><code>word = "Python"<br>print(len(word))</code></div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'p1',false)">5</div>
+    <div class="quiz-opt" onclick="answer(this,'p1',true)">6</div>
+    <div class="quiz-opt" onclick="answer(this,'p1',false)">7</div>
+    <div class="quiz-opt" onclick="answer(this,'p1',false)">An error</div>
+  </div>
+  <div class="quiz-feedback" id="fb-p1"></div>
+</div>
+
+<div class="quiz-card">
+  <div class="quiz-q">What does this print?<br><code>s = "Hello"<br>print(s[1] + s[4])</code></div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'p2',false)">Ho</div>
+    <div class="quiz-opt" onclick="answer(this,'p2',true)">eo</div>
+    <div class="quiz-opt" onclick="answer(this,'p2',false)">He</div>
+    <div class="quiz-opt" onclick="answer(this,'p2',false)">lo</div>
+  </div>
+  <div class="quiz-feedback" id="fb-p2"></div>
+</div>
+
+<div class="quiz-card">
+  <div class="quiz-q">What does this print?<br><code>word = "Computing"<br>print(word[0:4])</code></div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'p3',true)">Comp</div>
+    <div class="quiz-opt" onclick="answer(this,'p3',false)">Compu</div>
+    <div class="quiz-opt" onclick="answer(this,'p3',false)">ompu</div>
+    <div class="quiz-opt" onclick="answer(this,'p3',false)">Com</div>
+  </div>
+  <div class="quiz-feedback" id="fb-p3"></div>
+</div>
+
+<div class="quiz-card">
+  <div class="quiz-q">What does this print?<br><code>name = "Jersey"<br>print(name[-2])</code></div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'p4',false)">y</div>
+    <div class="quiz-opt" onclick="answer(this,'p4',true)">e</div>
+    <div class="quiz-opt" onclick="answer(this,'p4',false)">J</div>
+    <div class="quiz-opt" onclick="answer(this,'p4',false)">r</div>
+  </div>
+  <div class="quiz-feedback" id="fb-p4"></div>
+</div>
+
+<hr class="divider">
+<div class="section-title">🎮 Memory Game <span class="pill">ACTIVITY 7</span></div>
+<p style="color:var(--muted);font-size:0.88rem;margin-bottom:14px;">Match each function to its description. Click two cards to flip them!</p>
+<div style="font-family:var(--mono);font-size:0.78rem;color:var(--muted);margin-bottom:10px;display:flex;gap:20px;"><span id="mem-moves">Moves: 0</span><span id="mem-pairs">Pairs: 0/5</span></div>
+<div class="memory-grid" id="mem-grid" style="grid-template-columns:repeat(5,1fr);"></div>
+<button style="font-family:var(--mono);font-size:0.72rem;background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(255,255,255,0.08);padding:6px 16px;border-radius:6px;cursor:pointer;margin-top:10px;" onclick="resetMemory()">↺ Reset Game</button>
+
+<hr class="divider">
+<div class="section-title">🚀 Extension Activity <span class="pill">STRETCH</span></div>
+<div class="info-box red">
+  <b>Challenge: Reverse String Builder</b><br><br>
+  Write a program that reads each line from input.txt and creates a <b>reversed</b> version of the string using slicing.<br><br>
+  <b>Hint:</b> In Python, <code style="font-family:var(--mono);">word[::-1]</code> reverses a string!<br><br>
+  <b>Steps:</b><br>
+  1. Read each line from input.txt<br>
+  2. Reverse each line using <code style="font-family:var(--mono);">line[::-1]</code><br>
+  3. Write to output.txt: the original line, the reversed line, and the length<br>
+  4. Check: Is any line a <b>palindrome</b> (reads the same forwards and backwards)?<br><br>
+  <b>Extra challenge:</b> Use <code style="font-family:var(--mono);">line[::2]</code> to get every other character. What does <code style="font-family:var(--mono);">line[1::2]</code> do?
+</div>
+
 <div style="display:flex;justify-content:space-between;padding:20px 0 60px;">
   <a href="lesson1.html" style="color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:0.8rem;">← Lesson 1</a>
   <a href="lesson3.html" style="color:var(--accent);text-decoration:none;font-family:var(--mono);font-size:0.8rem;background:rgba(255,217,61,0.1);border:1px solid rgba(255,217,61,0.3);padding:10px 20px;border-radius:8px;">Lesson 3: Finding & Searching →</a>
@@ -310,14 +401,59 @@ function answer(el,qid,correct){
     q1:{ok:'✅ Correct! "Jersey" has 6 characters — J,e,r,s,e,y.',fail:'❌ Count carefully: J-e-r-s-e-y = 6 characters.'},
     q2:{ok:'✅ Right! Index 0 always gives the FIRST character.',fail:'❌ Index 0 is the FIRST character, which is "P".'},
     q3:{ok:'✅ Correct! s[1:3] gives characters at index 1 and 2 (the end index is excluded).',fail:'❌ Slicing s[1:3] gives index 1 and 2 only — the end is NOT included. So "CS".'},
-    q4:{ok:'✅ Correct! Negative index -1 always gives the LAST character.',fail:'❌ -1 gives the last character, which is "e".'}
+    q4:{ok:'✅ Correct! Negative index -1 always gives the LAST character.',fail:'❌ -1 gives the last character, which is "e".'},
+    p1:{ok:'✅ Correct! "Python" has 6 characters: P-y-t-h-o-n.',fail:'❌ Count each character: P-y-t-h-o-n = 6 characters.'},
+    p2:{ok:'✅ Correct! s[1] = "e" and s[4] = "o". Concatenated = "eo".',fail:'❌ s[1] = "e" (index starts at 0) and s[4] = "o". "e" + "o" = "eo".'},
+    p3:{ok:'✅ Correct! [0:4] gives characters at index 0, 1, 2, 3 = "Comp".',fail:'❌ [0:4] gives 4 characters starting from index 0. The end index is excluded, so you get "Comp".'},
+    p4:{ok:'✅ Correct! name[-2] is the second-to-last character. J-e-r-s-e-y → "e".',fail:'❌ Negative indexing: -1 is "y", -2 is "e". So name[-2] = "e".'}
   };
   fb.textContent=msgs[qid][correct?'ok':'fail'];
 }
 function copyCode(btn,id){
   const pre=document.getElementById(id);
-  navigator.clipboard.writeText(pre.innerText).then(()=>{btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy template',2000);});
+  const origText=btn.textContent;
+  navigator.clipboard.writeText(pre.innerText).then(()=>{btn.textContent='Copied!';setTimeout(()=>btn.textContent=origText,2000);});
 }
+
+// Memory Game
+const memPairs=[
+  {fn:'len(s)',def:'Number of characters'},
+  {fn:'s[0]',def:'First character'},
+  {fn:'s[-1]',def:'Last character'},
+  {fn:'s[1:4]',def:'Chars at index 1,2,3'},
+  {fn:'s[:3]',def:'First 3 characters'},
+];
+let memCards=[],memFlipped=[],memMoves=0,memPairsFound=0;
+function buildMemory(){
+  const items=[...memPairs.map(p=>({text:p.fn,pair:p.fn,type:'fn'})),...memPairs.map(p=>({text:p.def,pair:p.fn,type:'def'}))];
+  items.sort(()=>Math.random()-0.5);
+  const grid=document.getElementById('mem-grid');
+  grid.innerHTML='';memCards=[];memFlipped=[];memMoves=0;memPairsFound=0;
+  document.getElementById('mem-moves').textContent='Moves: 0';
+  document.getElementById('mem-pairs').textContent='Pairs: 0/5';
+  items.forEach(item=>{
+    const card=document.createElement('div');
+    card.className='mem-card';
+    card.setAttribute('data-front',item.text);
+    card.dataset.pair=item.pair;
+    card.addEventListener('click',()=>flipCard(card));
+    grid.appendChild(card);
+    memCards.push(card);
+  });
+}
+function flipCard(card){
+  if(card.classList.contains('flipped')||card.classList.contains('matched-m')||memFlipped.length===2)return;
+  card.classList.add('flipped');memFlipped.push(card);
+  if(memFlipped.length===2){
+    memMoves++;document.getElementById('mem-moves').textContent=`Moves: ${memMoves}`;
+    if(memFlipped[0].dataset.pair===memFlipped[1].dataset.pair&&memFlipped[0]!==memFlipped[1]){
+      memFlipped.forEach(c=>c.classList.add('matched-m'));memPairsFound++;
+      document.getElementById('mem-pairs').textContent=`Pairs: ${memPairsFound}/5`;memFlipped=[];
+    } else {setTimeout(()=>{memFlipped.forEach(c=>c.classList.remove('flipped'));memFlipped=[];},900);}
+  }
+}
+function resetMemory(){buildMemory();}
+buildMemory();
 </script>
 </body>
 </html>

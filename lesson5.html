@@ -137,8 +137,25 @@
 <div class="section-title">💻 Coding Tasks <span class="pill">WRITE YOUR OWN</span></div>
 
 <div class="info-box green">
-  <b>📁 input.txt for this lesson:</b><br>
-  Create a file with a mix of lines — some short, some with numbers, some with keywords like "Python" and "Jersey". At least 8 lines. No starter code is given — you write it all!
+  <b>📁 Create input.txt for this lesson:</b> Open Notepad, paste the text below, and save as <code style="font-family:var(--mono)">input.txt</code> in the same folder as your Python file.
+</div>
+<div class="code-block">
+  <div class="code-header">
+    <span class="code-lang">TEXT — input.txt</span>
+    <button class="copy-btn" onclick="copyCode(this,'txtfile5')">Copy</button>
+  </div>
+  <pre id="txtfile5">Python is a versatile language
+Jersey has a population of 103000
+GCSE Computer Science exam is 1CP2
+I scored 95 percent on my test
+the quick brown fox jumps
+Programming helps solve problems
+My postcode is JE2 3AB
+There are 365 days in a year
+Hello World
+Channel Islands include Jersey and Guernsey
+Room 101 is down the corridor
+abcdefghijklmnopqrstuvwxyz</pre>
 </div>
 
 <div class="task-card">
@@ -181,6 +198,24 @@
   </div>
   <button class="hint-btn" onclick="toggleHint('h3a')">💡 Hint: running totals</button>
   <div class="hint-box" id="h3a">Before the outer for loop, set: <code>total_letters = 0</code>, then inside the loop add: <code>total_letters += letters</code></div>
+</div>
+
+<div class="task-card">
+  <div class="task-num">TASK 04</div>
+  <h3>🔧 Refactor with Subroutines</h3>
+  <p>Take your Task 03 code and refactor it to use <b>subroutines</b>. Create at least two functions:</p>
+  <p>1. <code style="font-family:var(--mono)">def count_chars(line)</code> — takes a string, returns the count of letters, digits, and spaces<br>
+  2. <code style="font-family:var(--mono)">def format_report(line, letters, digits, spaces)</code> — takes the data and returns a formatted string for the output file</p>
+  <div class="task-checks">
+    <div class="task-check"><input type="checkbox" id="t4a" onchange="updateTracker()"><label for="t4a">Defines a <code style="font-family:var(--mono)">count_chars()</code> function that returns multiple values</label></div>
+    <div class="task-check"><input type="checkbox" id="t4b" onchange="updateTracker()"><label for="t4b">Defines a <code style="font-family:var(--mono)">format_report()</code> function that returns a formatted string</label></div>
+    <div class="task-check"><input type="checkbox" id="t4c" onchange="updateTracker()"><label for="t4c">Main program calls both functions inside the loop</label></div>
+    <div class="task-check"><input type="checkbox" id="t4d" onchange="updateTracker()"><label for="t4d">Program produces the same output as Task 03 but with cleaner code</label></div>
+  </div>
+  <button class="hint-btn" onclick="toggleHint('h4a')">💡 Hint: returning multiple values</button>
+  <div class="hint-box" id="h4a">In Python you can return multiple values: <code>return letters, digits, spaces</code> and unpack them: <code>l, d, s = count_chars(line)</code></div>
+  <button class="hint-btn" onclick="toggleHint('h4b')">💡 Hint: format_report</button>
+  <div class="hint-box" id="h4b">Use an f-string: <code>return f"Line: {line} | Letters: {letters} | Digits: {digits} | Spaces: {spaces}\n"</code></div>
 </div>
 
 <hr class="divider">
@@ -249,6 +284,74 @@ output_file.close()
   <div class="quiz-feedback" id="fb-q3"></div>
 </div>
 
+<hr class="divider">
+<div class="section-title">🔮 Predict the Output <span class="pill">ACTIVITY 6</span></div>
+<p style="color:var(--muted);font-size:0.88rem;margin-bottom:16px;">These snippets combine multiple string functions. What does each one print?</p>
+
+<div class="quiz-card">
+  <div class="quiz-q">What does this print?<br><code>def process(text):<br>&nbsp;&nbsp;&nbsp;&nbsp;return text.strip().upper()[0:5]<br><br>print(process("  hello world  "))</code></div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'p1',true)">HELLO</div>
+    <div class="quiz-opt" onclick="answer(this,'p1',false)">hello</div>
+    <div class="quiz-opt" onclick="answer(this,'p1',false)">HELLO WORLD</div>
+    <div class="quiz-opt" onclick="answer(this,'p1',false)">  HEL</div>
+  </div>
+  <div class="quiz-feedback" id="fb-p1"></div>
+</div>
+
+<div class="quiz-card">
+  <div class="quiz-q">What does this print?<br><code>line = "Test123"<br>count = 0<br>for ch in line:<br>&nbsp;&nbsp;&nbsp;&nbsp;if ch.isdigit():<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count += 1<br>print(count)</code></div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'p2',false)">1</div>
+    <div class="quiz-opt" onclick="answer(this,'p2',true)">3</div>
+    <div class="quiz-opt" onclick="answer(this,'p2',false)">7</div>
+    <div class="quiz-opt" onclick="answer(this,'p2',false)">4</div>
+  </div>
+  <div class="quiz-feedback" id="fb-p2"></div>
+</div>
+
+<div class="quiz-card">
+  <div class="quiz-q">What does this print?<br><code>word = "Python"<br>result = word.lower().find("th")<br>print(result)</code></div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'p3',false)">0</div>
+    <div class="quiz-opt" onclick="answer(this,'p3',false)">1</div>
+    <div class="quiz-opt" onclick="answer(this,'p3',true)">2</div>
+    <div class="quiz-opt" onclick="answer(this,'p3',false)">-1</div>
+  </div>
+  <div class="quiz-feedback" id="fb-p3"></div>
+</div>
+
+<div class="quiz-card">
+  <div class="quiz-q">What does this print?<br><code>def count_chars(text):<br>&nbsp;&nbsp;&nbsp;&nbsp;letters = 0<br>&nbsp;&nbsp;&nbsp;&nbsp;digits = 0<br>&nbsp;&nbsp;&nbsp;&nbsp;for ch in text:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ch.isalpha(): letters += 1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif ch.isdigit(): digits += 1<br>&nbsp;&nbsp;&nbsp;&nbsp;return letters, digits<br><br>l, d = count_chars("Hi 42!")<br>print(f"{l} letters, {d} digits")</code></div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'p4',true)">2 letters, 2 digits</div>
+    <div class="quiz-opt" onclick="answer(this,'p4',false)">3 letters, 2 digits</div>
+    <div class="quiz-opt" onclick="answer(this,'p4',false)">2 letters, 1 digits</div>
+    <div class="quiz-opt" onclick="answer(this,'p4',false)">5 letters, 0 digits</div>
+  </div>
+  <div class="quiz-feedback" id="fb-p4"></div>
+</div>
+
+<hr class="divider">
+<div class="section-title">🚀 Extension Activity <span class="pill">STRETCH</span></div>
+<div class="task-card">
+  <div class="task-num">TASK 05 — EXTENSION</div>
+  <h3>Challenge: Text Statistics Dashboard</h3>
+  <p>Write a complete program using <b>at least 3 subroutines</b> that produces a detailed text statistics report. Your program should include:</p>
+  <p>1. <code style="font-family:var(--mono)">def count_chars(line)</code> — counts letters, digits, spaces<br>
+  2. <code style="font-family:var(--mono)">def find_longest_word(line)</code> — finds the longest word in a line (hint: use <code style="font-family:var(--mono)">.split()</code>)<br>
+  3. <code style="font-family:var(--mono)">def generate_summary(total_lines, total_letters, total_digits, longest_line)</code> — returns a formatted summary string</p>
+  <p>Read input.txt and write a full report to output.txt. The report should include per-line stats AND an overall summary at the end with totals and the longest line found.</p>
+  <div class="task-checks">
+    <div class="task-check"><input type="checkbox" id="t5a" onchange="updateTracker()"><label for="t5a">Defines and uses at least 3 subroutines</label></div>
+    <div class="task-check"><input type="checkbox" id="t5b" onchange="updateTracker()"><label for="t5b">Reads from input.txt and writes to output.txt</label></div>
+    <div class="task-check"><input type="checkbox" id="t5c" onchange="updateTracker()"><label for="t5c">Produces per-line statistics</label></div>
+    <div class="task-check"><input type="checkbox" id="t5d" onchange="updateTracker()"><label for="t5d">Produces an overall summary with totals</label></div>
+  </div>
+  <button class="hint-btn" onclick="toggleHint('h5a')">💡 Hint: finding longest word</button>
+  <div class="hint-box" id="h5a">Split the line into words: <code>words = line.split()</code>. Then loop through and compare lengths: <code>if len(word) > len(longest): longest = word</code></div>
+</div>
+
 <div style="display:flex;justify-content:space-between;padding:20px 0 60px;">
   <a href="lesson4.html" style="color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:0.8rem;">← Lesson 4</a>
   <a href="lesson6.html" style="color:var(--accent);text-decoration:none;font-family:var(--mono);font-size:0.8rem;background:rgba(199,125,255,0.1);border:1px solid rgba(199,125,255,0.3);padding:10px 20px;border-radius:8px;">Lesson 6: Final Challenge →</a>
@@ -256,6 +359,8 @@ output_file.close()
 </div>
 
 <script>
+function copyCode(btn,id){const code=document.getElementById(id).textContent;navigator.clipboard.writeText(code).then(()=>{btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',2000);});}
+
 function toggleHint(id){document.getElementById(id).classList.toggle('show');}
 
 function updateTracker(){
@@ -288,7 +393,11 @@ function answer(el,qid,correct){
   const msgs={
     q1:{ok:'✅ s[1:4] gives "ell", then .upper() makes it "ELL".',fail:'❌ s[1:4] gives characters at index 1,2,3 = "ell". Then .upper() → "ELL".'},
     q2:{ok:'✅ This uses a generator expression to count matching characters — efficient and Pythonic!',fail:'❌ The correct way is: sum(1 for ch in s if ch.isdigit()) — it counts each digit character.'},
-    q3:{ok:'✅ strip() removes spaces → "hello", upper() → "HELLO", [0] → "H".',fail:'❌ Step by step: strip() removes spaces → "hello", upper() → "HELLO", [0] → "H".'}
+    q3:{ok:'✅ strip() removes spaces → "hello", upper() → "HELLO", [0] → "H".',fail:'❌ Step by step: strip() removes spaces → "hello", upper() → "HELLO", [0] → "H".'},
+    p1:{ok:'✅ strip() removes spaces → "hello world", upper() → "HELLO WORLD", [0:5] → "HELLO".',fail:'❌ Step by step: strip() → "hello world", upper() → "HELLO WORLD", [0:5] → "HELLO".'},
+    p2:{ok:'✅ "Test123" has 3 digits: 1, 2, 3. The loop counts each one.',fail:'❌ Count the digits in "Test123": 1, 2, 3 = 3 digits total.'},
+    p3:{ok:'✅ "python".find("th") → index 2. p=0, y=1, t=2.',fail:'❌ "Python" → .lower() → "python". Then .find("th"): p=0, y=1, t=2. Returns 2.'},
+    p4:{ok:'✅ "Hi 42!" → H=letter, i=letter, space=neither, 4=digit, 2=digit, !=neither. So 2 letters, 2 digits.',fail:'❌ "Hi 42!": H(letter) i(letter) (space) 4(digit) 2(digit) !(neither) = 2 letters, 2 digits.'}
   };
   fb.textContent=msgs[qid][correct?'ok':'fail'];
 }

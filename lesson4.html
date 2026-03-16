@@ -87,6 +87,11 @@
   .hint-btn{font-family:var(--mono);font-size:0.7rem;background:rgba(255,217,61,0.1);color:var(--accent4);border:1px solid rgba(255,217,61,0.3);padding:5px 14px;border-radius:6px;cursor:pointer;margin-bottom:6px;display:inline-block;}
   .hint-box{background:rgba(255,217,61,0.06);border:1px solid rgba(255,217,61,0.2);border-radius:8px;padding:12px 16px;margin-top:8px;font-size:0.85rem;color:var(--muted);display:none;}
   .hint-box.show{display:block;}
+  .code-block{background:#0d0b1a;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;}
+  .code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(255,255,255,0.04);border-bottom:1px solid var(--border);}
+  .code-lang{font-family:var(--mono);font-size:0.65rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+  .copy-btn{font-family:var(--mono);font-size:0.65rem;background:rgba(77,150,255,0.15);color:var(--accent);border:1px solid rgba(77,150,255,0.3);padding:4px 12px;border-radius:6px;cursor:pointer;transition:all 0.2s;}
+  .copy-btn:hover{background:rgba(77,150,255,0.25);}
   ::-webkit-scrollbar{width:6px;height:6px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px;}
 </style>
 </head>
@@ -115,6 +120,28 @@
     <li><div class="obj-check">✓</div>Count different types of characters and write results to a file</li>
   </ul>
 </div>
+
+<div class="section-title">📁 Text File for This Lesson <span class="pill">SETUP</span></div>
+<div class="info-box green">
+  <b>Create input.txt:</b> Open Notepad, paste the text below, and save as <code style="font-family:var(--mono)">input.txt</code> in the same folder as your Python file.
+</div>
+<div class="code-block">
+  <div class="code-header">
+    <span class="code-lang">TEXT — input.txt</span>
+    <button class="copy-btn" onclick="copyCode(this,'txtfile4')">Copy</button>
+  </div>
+  <pre id="txtfile4">Hello World 123
+My phone number is 07700 900123
+Python3 is great
+No digits here at all
+Room 42 is the answer
+GCSE grades include 9 8 7 6 5
+abc def ghi
+Test123Test456
+  Spaces at the start and end
+Mixed CaSe With 99 Numbers</pre>
+</div>
+<hr class="divider">
 
 <!-- CHAR TESTER -->
 <div class="section-title">🧪 Character Tester <span class="pill">ACTIVITY 1</span></div>
@@ -207,8 +234,65 @@ input_file.<span class="bug-mark" data-fix="close()" data-explain="close() needs
   <div class="hint-box" id="h2">Use <code style="font-family:var(--mono)">ch.isdigit()</code> inside the inner loop. Set a flag variable (e.g. <code style="font-family:var(--mono)">has_digit = False</code>) and set it True when you find one.</div>
 </div>
 
+<hr class="divider">
+<div class="section-title">🔧 Subroutines for Character Analysis <span class="pill">ACTIVITY 6</span></div>
+<div class="info-box">
+  <b>📌 Why use subroutines here?</b><br>
+  When we count letters, digits, and spaces, we repeat the same pattern for every line. A <b>subroutine</b> lets us wrap this logic into a reusable function. We can then call it for any string we want to analyse!
+</div>
+
+<div class="code-block">
+  <div class="code-header">
+    <span class="code-lang">Python — subroutine for character counting</span>
+    <button class="copy-btn" onclick="copyCode(this,'code-sub4')">Copy</button>
+  </div>
+  <pre id="code-sub4"><span class="cm"># Define a subroutine to count character types</span>
+<span class="kw">def</span> <span class="fn">count_chars</span>(<span class="var">text</span>):
+    <span class="var">letters</span> = <span class="num">0</span>
+    <span class="var">digits</span> = <span class="num">0</span>
+    <span class="var">spaces</span> = <span class="num">0</span>
+    <span class="kw">for</span> <span class="var">ch</span> <span class="kw">in</span> <span class="var">text</span>:
+        <span class="kw">if</span> <span class="var">ch</span>.<span class="fn">isalpha</span>():
+            <span class="var">letters</span> += <span class="num">1</span>
+        <span class="kw">elif</span> <span class="var">ch</span>.<span class="fn">isdigit</span>():
+            <span class="var">digits</span> += <span class="num">1</span>
+        <span class="kw">elif</span> <span class="var">ch</span>.<span class="fn">isspace</span>():
+            <span class="var">spaces</span> += <span class="num">1</span>
+    <span class="kw">return</span> <span class="var">letters</span>, <span class="var">digits</span>, <span class="var">spaces</span>
+
+<span class="cm"># Define a subroutine to check if a line has digits</span>
+<span class="kw">def</span> <span class="fn">has_digits</span>(<span class="var">text</span>):
+    <span class="kw">for</span> <span class="var">ch</span> <span class="kw">in</span> <span class="var">text</span>:
+        <span class="kw">if</span> <span class="var">ch</span>.<span class="fn">isdigit</span>():
+            <span class="kw">return</span> <span class="kw">True</span>
+    <span class="kw">return</span> <span class="kw">False</span>
+
+<span class="cm"># Main program</span>
+<span class="var">input_file</span> = <span class="fn">open</span>(<span class="str">"input.txt"</span>, <span class="str">"r"</span>)
+<span class="var">output_file</span> = <span class="fn">open</span>(<span class="str">"output.txt"</span>, <span class="str">"w"</span>)
+
+<span class="kw">for</span> <span class="var">line</span> <span class="kw">in</span> <span class="var">input_file</span>:
+    <span class="var">line</span> = <span class="var">line</span>.<span class="fn">strip</span>()
+    <span class="var">l</span>, <span class="var">d</span>, <span class="var">s</span> = <span class="fn">count_chars</span>(<span class="var">line</span>)
+    <span class="fn">print</span>(<span class="str">f"{line} → Letters:{l} Digits:{d} Spaces:{s}"</span>)
+
+    <span class="kw">if</span> <span class="fn">has_digits</span>(<span class="var">line</span>):
+        <span class="var">output_file</span>.<span class="fn">write</span>(<span class="var">line</span> + <span class="str">"\n"</span>)
+
+<span class="var">input_file</span>.<span class="fn">close</span>()
+<span class="var">output_file</span>.<span class="fn">close</span>()
+<span class="fn">print</span>(<span class="str">"Done! Lines with digits saved to output.txt"</span>)</pre>
+</div>
+
+<div class="info-box yellow">
+  <b>🔑 New concept: returning multiple values!</b><br>
+  • <code style="font-family:var(--mono);">return letters, digits, spaces</code> — returns 3 values at once<br>
+  • <code style="font-family:var(--mono);">l, d, s = count_chars(line)</code> — unpacks the 3 returned values into 3 variables<br>
+  • The <code style="font-family:var(--mono);">has_digits()</code> function returns True/False — useful in an <code style="font-family:var(--mono);">if</code> statement
+</div>
+
 <!-- QUIZ -->
-<div class="section-title">🧠 Quick Quiz <span class="pill">ACTIVITY 6</span></div>
+<div class="section-title">🧠 Quick Quiz <span class="pill">ACTIVITY 7</span></div>
 <div class="quiz-card">
   <div class="quiz-q">What does <code>"abc123".isalpha()</code> return?</div>
   <div class="quiz-options">
@@ -250,6 +334,57 @@ input_file.<span class="bug-mark" data-fix="close()" data-explain="close() needs
   <div class="quiz-feedback" id="fb-q4"></div>
 </div>
 
+<hr class="divider">
+<div class="section-title">🔮 Predict the Output <span class="pill">ACTIVITY 8</span></div>
+<p style="color:var(--muted);font-size:0.88rem;margin-bottom:16px;">What does each snippet print? Think carefully about character types!</p>
+
+<div class="quiz-card">
+  <div class="quiz-q">What does this print?<br><code>text = "abc123"<br>print(text.isalpha())</code></div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'p1',false)">True</div>
+    <div class="quiz-opt" onclick="answer(this,'p1',true)">False</div>
+    <div class="quiz-opt" onclick="answer(this,'p1',false)">3</div>
+    <div class="quiz-opt" onclick="answer(this,'p1',false)">An error</div>
+  </div>
+  <div class="quiz-feedback" id="fb-p1"></div>
+</div>
+
+<div class="quiz-card">
+  <div class="quiz-q">What does this print?<br><code>def has_digits(text):<br>&nbsp;&nbsp;&nbsp;&nbsp;for ch in text:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ch.isdigit():<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return True<br>&nbsp;&nbsp;&nbsp;&nbsp;return False<br><br>print(has_digits("Hello World"))</code></div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'p2',false)">True</div>
+    <div class="quiz-opt" onclick="answer(this,'p2',true)">False</div>
+    <div class="quiz-opt" onclick="answer(this,'p2',false)">0</div>
+    <div class="quiz-opt" onclick="answer(this,'p2',false)">An error</div>
+  </div>
+  <div class="quiz-feedback" id="fb-p2"></div>
+</div>
+
+<div class="quiz-card">
+  <div class="quiz-q">What does this print?<br><code>word = " "<br>print(word.isspace())<br>print(word.isalpha())</code></div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'p3',true)">True<br>False</div>
+    <div class="quiz-opt" onclick="answer(this,'p3',false)">False<br>True</div>
+    <div class="quiz-opt" onclick="answer(this,'p3',false)">True<br>True</div>
+    <div class="quiz-opt" onclick="answer(this,'p3',false)">False<br>False</div>
+  </div>
+  <div class="quiz-feedback" id="fb-p3"></div>
+</div>
+
+<hr class="divider">
+<div class="section-title">🚀 Extension Activity <span class="pill">STRETCH</span></div>
+<div class="write-task">
+  <h3>Challenge: Password Validator Subroutine</h3>
+  <p>Write a program with a subroutine called <code style="font-family:var(--mono)">validate_password(password)</code> that checks if a password is strong. A strong password must:</p>
+  <p>• Be at least 8 characters long (use <code style="font-family:var(--mono)">len()</code>)<br>
+  • Contain at least one letter (use <code style="font-family:var(--mono)">isalpha()</code>)<br>
+  • Contain at least one digit (use <code style="font-family:var(--mono)">isdigit()</code>)</p>
+  <p>The subroutine should return <code style="font-family:var(--mono)">True</code> if the password is strong, <code style="font-family:var(--mono)">False</code> if not.</p>
+  <p>Read passwords from input.txt (one per line) and write only the <b>strong</b> passwords to output.txt. Print how many passed and how many failed.</p>
+  <button class="hint-btn" onclick="toggleHint('hex1')">💡 Hint: structure</button>
+  <div class="hint-box" id="hex1">Inside the subroutine, use variables like <code style="font-family:var(--mono)">has_letter = False</code> and <code style="font-family:var(--mono)">has_digit = False</code>. Loop through each character with <code style="font-family:var(--mono)">for ch in password</code>. At the end, return <code style="font-family:var(--mono)">len(password) >= 8 and has_letter and has_digit</code>.</div>
+</div>
+
 <div style="display:flex;justify-content:space-between;padding:20px 0 60px;">
   <a href="lesson3.html" style="color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:0.8rem;">← Lesson 3</a>
   <a href="lesson5.html" style="color:var(--accent);text-decoration:none;font-family:var(--mono);font-size:0.8rem;background:rgba(77,150,255,0.1);border:1px solid rgba(77,150,255,0.3);padding:10px 20px;border-radius:8px;">Lesson 5: Combining It All →</a>
@@ -257,6 +392,13 @@ input_file.<span class="bug-mark" data-fix="close()" data-explain="close() needs
 </div>
 
 <script>
+function copyCode(btn,id){
+  const pre=document.getElementById(id);
+  navigator.clipboard.writeText(pre.innerText).then(()=>{
+    btn.textContent='Copied!';
+    setTimeout(()=>btn.textContent='Copy',2000);
+  });
+}
 function updateTester(){
   const s=document.getElementById('ct-in').value;
   if(!s){return;}
@@ -323,7 +465,10 @@ function answer(el,qid,correct){
     q1:{ok:'✅ Correct! isalpha() only returns True if ALL characters are letters.',fail:'❌ "abc123" contains digits too, so isalpha() returns False.'},
     q2:{ok:'✅ "7" is a digit character — isdigit() returns True.',fail:'❌ "7" is a digit. isdigit() would return True for it.'},
     q3:{ok:'✅ for ch in word: loops through each character one by one!',fail:'❌ Use: for ch in word: — this gives you each character in turn.'},
-    q4:{ok:'✅ A single space character is whitespace, so isspace() returns True.',fail:'❌ A space " " IS a space character — isspace() returns True.'}
+    q4:{ok:'✅ A single space character is whitespace, so isspace() returns True.',fail:'❌ A space " " IS a space character — isspace() returns True.'},
+    p1:{ok:'✅ Correct! isalpha() returns False because the string also contains digits.',fail:'❌ isalpha() only returns True if ALL characters are letters. "abc123" contains digits too.'},
+    p2:{ok:'✅ Correct! "Hello World" has no digit characters, so the function returns False.',fail:'❌ The function checks each character. None of "Hello World" are digits, so it returns False.'},
+    p3:{ok:'✅ Correct! A single space IS whitespace (isspace=True) but NOT a letter (isalpha=False).',fail:'❌ A space character: isspace() → True (it IS whitespace), isalpha() → False (it\'s NOT a letter).'}
   };
   fb.textContent=msgs[qid][correct?'ok':'fail'];
 }

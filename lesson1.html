@@ -175,6 +175,7 @@
     <div class="p-dot active" title="Code"></div>
     <div class="p-dot" title="Fill"></div>
     <div class="p-dot" title="Quiz"></div>
+    <div class="p-dot" title="Predict"></div>
     <div class="p-dot" title="Memory"></div>
   </div>
 </div>
@@ -210,8 +211,20 @@
   <div class="section-title">💻 Your First Program <span class="pill">ACTIVITY 2</span></div>
 
   <div class="info-box green">
-    <b>📁 Before you start:</b> Open Notepad and create a file called <code style="font-family:var(--mono);">input.txt</code>. Save it in the same folder where you will save your Python file. Add 5–6 lines of mixed-case text, for example:<br><br>
-    <code style="font-family:var(--mono);">My Name Is Alex<br>i love coding in python<br>GCSE Computer Science Is Fun<br>hello World</code>
+    <b>📁 Before you start:</b> Open Notepad and create a file called <code style="font-family:var(--mono);">input.txt</code>. Save it in the same folder where you will save your Python file. Copy the text below and paste it into Notepad, then save the file:
+  </div>
+
+  <div class="code-block">
+    <div class="code-header">
+      <span class="code-lang">TEXT — input.txt</span>
+      <button class="copy-btn" onclick="copyCode(this,'txtfile1')">Copy</button>
+    </div>
+    <pre id="txtfile1">My Name Is Alex
+i love coding in python
+GCSE Computer Science Is Fun
+hello World
+The Quick Brown Fox
+jersey is a BEAUTIFUL island</pre>
   </div>
 
   <div class="info-box" style="border-left-color:#4d96ff;">
@@ -339,14 +352,70 @@
   </div>
 </div>
 
-<!-- SECTION 5: MEMORY GAME -->
+<!-- SECTION 5: PREDICT THE OUTPUT -->
 <div class="section">
   <hr class="divider">
-  <div class="section-title">🎮 Memory Game <span class="pill">ACTIVITY 5</span></div>
+  <div class="section-title">🔮 Predict the Output <span class="pill">ACTIVITY 5</span></div>
+  <p style="color:var(--muted);font-size:0.88rem;margin-bottom:16px;">Look at each code snippet and predict what will be printed. Click to reveal the answer!</p>
+
+  <div class="quiz-card">
+    <div class="quiz-q">What does this print?<br><code>word = "Python"<br>print(word.upper())<br>print(word)</code></div>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="answer(this,'p1',false)">PYTHON<br>PYTHON</div>
+      <div class="quiz-opt" onclick="answer(this,'p1',true)">PYTHON<br>Python</div>
+      <div class="quiz-opt" onclick="answer(this,'p1',false)">python<br>Python</div>
+      <div class="quiz-opt" onclick="answer(this,'p1',false)">An error</div>
+    </div>
+    <div class="quiz-feedback" id="fb-p1"></div>
+  </div>
+
+  <div class="quiz-card">
+    <div class="quiz-q">What does this print?<br><code>text = "Hello World"<br>result = text.lower()<br>print(result)</code></div>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="answer(this,'p2',false)">Hello World</div>
+      <div class="quiz-opt" onclick="answer(this,'p2',true)">hello world</div>
+      <div class="quiz-opt" onclick="answer(this,'p2',false)">HELLO WORLD</div>
+      <div class="quiz-opt" onclick="answer(this,'p2',false)">Hello world</div>
+    </div>
+    <div class="quiz-feedback" id="fb-p2"></div>
+  </div>
+
+  <div class="quiz-card">
+    <div class="quiz-q">What does this print?<br><code>name = "jersey"<br>name.upper()<br>print(name)</code></div>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="answer(this,'p3',false)">JERSEY</div>
+      <div class="quiz-opt" onclick="answer(this,'p3',true)">jersey</div>
+      <div class="quiz-opt" onclick="answer(this,'p3',false)">Jersey</div>
+      <div class="quiz-opt" onclick="answer(this,'p3',false)">An error</div>
+    </div>
+    <div class="quiz-feedback" id="fb-p3"></div>
+  </div>
+</div>
+
+<!-- SECTION 6: MEMORY GAME -->
+<div class="section">
+  <hr class="divider">
+  <div class="section-title">🎮 Memory Game <span class="pill">ACTIVITY 6</span></div>
   <p style="color:var(--muted);font-size:0.88rem;margin-bottom:14px;">Match each function to its description. Click two cards to flip them!</p>
   <div class="mem-stats"><span id="mem-moves">Moves: 0</span><span id="mem-pairs">Pairs: 0/4</span></div>
   <div class="memory-grid" id="mem-grid"></div>
   <button class="reset-btn" onclick="resetMemory()">↺ Reset Game</button>
+</div>
+
+<!-- EXTENSION ACTIVITY -->
+<div class="section">
+  <hr class="divider">
+  <div class="section-title">🚀 Extension Activity <span class="pill">STRETCH</span></div>
+  <div class="info-box red">
+    <b>Challenge: Title Case Converter</b><br><br>
+    Modify your program so that instead of converting lines to upper or lower case, it converts them to <b>title case</b> (first letter of each word capitalised).<br><br>
+    <b>Steps:</b><br>
+    1. Read each line from input.txt<br>
+    2. Use Python's <code style="font-family:var(--mono);">.title()</code> method to convert to title case<br>
+    3. Write the original line AND the title case version to output.txt<br>
+    4. At the end, print how many lines were processed<br><br>
+    <b>Extra challenge:</b> Also write the <b>swapcase</b> version using <code style="font-family:var(--mono);">.swapcase()</code> — what does it do? Find out!
+  </div>
 </div>
 
 <!-- NAV BOTTOM -->
@@ -427,7 +496,10 @@ function answer(el,qid,correct){
     q1:{ok:'✅ Correct! .upper() converts every character to a capital letter.',fail:'❌ Not quite. .upper() makes EVERY letter a capital.'},
     q2:{ok:'✅ Correct! "w" mode opens a file for writing (creates it if it doesn\'t exist).',fail:'❌ "r" is for reading. Use "w" for writing.'},
     q3:{ok:'✅ Exactly right! Strings are immutable — .lower() returns a NEW string, it doesn\'t change the original variable.',fail:'❌ Strings are immutable! name is still "Python". You\'d need to write: name = name.lower()'},
-    q4:{ok:'✅ Correct! .strip() removes \\n newlines and spaces from both ends — very useful when reading files!',fail:'❌ .strip() removes whitespace/newlines from the start and end of the string.'}
+    q4:{ok:'✅ Correct! .strip() removes \\n newlines and spaces from both ends — very useful when reading files!',fail:'❌ .strip() removes whitespace/newlines from the start and end of the string.'},
+    p1:{ok:'✅ Correct! .upper() returns a NEW string — it doesn\'t change the original. So word is still "Python".',fail:'❌ Remember: strings are immutable. .upper() returns a new string but word stays as "Python".'},
+    p2:{ok:'✅ Correct! .lower() converts all characters to lowercase and stores the result in a new variable.',fail:'❌ .lower() converts ALL characters to lowercase. "Hello World" becomes "hello world".'},
+    p3:{ok:'✅ Correct! name.upper() is called but the result is NOT stored back. name is still "jersey".',fail:'❌ Tricky! name.upper() creates a new string but it\'s not saved anywhere. name stays as "jersey".'}
   };
   fb.textContent=msgs[qid][correct?'ok':'fail'];
 }

@@ -74,6 +74,12 @@
   .celebration::before{content:'🏆';font-size:4rem;display:block;margin-bottom:16px;}
   .celebration h2{font-size:1.5rem;font-weight:900;color:var(--accent);margin-bottom:10px;}
   .celebration p{color:var(--muted);font-size:0.95rem;}
+  .code-block{background:#0d0b1a;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;}
+  .code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(255,255,255,0.04);border-bottom:1px solid var(--border);}
+  .code-lang{font-family:var(--mono);font-size:0.65rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+  .copy-btn{font-family:var(--mono);font-size:0.65rem;background:rgba(255,159,28,0.15);color:var(--accent);border:1px solid rgba(255,159,28,0.3);padding:4px 12px;border-radius:6px;cursor:pointer;transition:all 0.2s;}
+  .copy-btn:hover{background:rgba(255,159,28,0.25);}
+  pre{padding:20px;font-family:var(--mono);font-size:0.82rem;line-height:1.8;overflow-x:auto;color:#c9d1d9;}
   ::-webkit-scrollbar{width:6px;height:6px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px;}
 </style>
 </head>
@@ -104,6 +110,32 @@
   <div class="prog-item"><span>Challenge 1</span><div class="prog-track"><div class="prog-fill" id="p1" style="width:0%;background:var(--accent)"></div></div></div>
   <div class="prog-item"><span>Challenge 2</span><div class="prog-track"><div class="prog-fill" id="p2" style="width:0%;background:#ff6b6b"></div></div></div>
   <div class="prog-item"><span>Challenge 3 ⭐</span><div class="prog-track"><div class="prog-fill" id="p3" style="width:0%;background:var(--accent5)"></div></div></div>
+  <div class="prog-item"><span>Challenge 4 ⭐⭐</span><div class="prog-track"><div class="prog-fill" id="p4" style="width:0%;background:var(--accent3)"></div></div></div>
+</div>
+
+<div class="section-title">📁 Text File for the Challenges <span class="pill">SETUP</span></div>
+<div class="info-box green">
+  <b>Create input.txt:</b> Open Notepad, paste the text below, and save as <code style="font-family:var(--mono)">input.txt</code> in the same folder as your Python files.
+</div>
+<div class="code-block">
+  <div class="code-header">
+    <span class="code-lang">TEXT — input.txt</span>
+    <button class="copy-btn" onclick="copyCode(this,'txtfile6')">Copy</button>
+  </div>
+  <pre id="txtfile6">The island of Jersey is located in the English Channel
+Python was created by Guido van Rossum in 1991
+GCSE Computer Science covers topics like algorithms
+My phone number is 07700 900456
+The population of Jersey is approximately 103000
+Programming helps develop logical thinking skills
+There are 26 letters in the English alphabet
+Haute Vallee School is in Jersey
+The exam code for this subject is 1CP2
+I scored 87 percent on my last mock exam
+the quick brown fox jumps over the lazy dog
+TESTING ALL UPPERCASE LETTERS HERE
+mixed CaSe WiTh 42 NuMbErS and spaces
+abc123def456ghi789</pre>
 </div>
 
 <div class="info-box red">
@@ -134,27 +166,33 @@
     <li class="req-item"><input type="checkbox" class="req-cb" id="r1d" onchange="updateProgress()"><label for="r1d">Accesses <code>line[0]</code> and <code>line[-1]</code></label></li>
     <li class="req-item"><input type="checkbox" class="req-cb" id="r1e" onchange="updateProgress()"><label for="r1e">Uses <code>.isalpha()</code> and writes result to output file</label></li>
     <li class="req-item"><input type="checkbox" class="req-cb" id="r1f" onchange="updateProgress()"><label for="r1f">Closes both files correctly</label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r1g" onchange="updateProgress()"><label for="r1g"><b>Extension:</b> Uses a <code>def analyse_line()</code> subroutine</label></li>
   </ul>
 
   <button class="ms-btn" onclick="toggleMS('ms1')">👁 Show Mark Scheme</button>
   <div class="ms-box" id="ms1">
-    <pre><span class="cm"># Challenge 1 — Mark Scheme</span>
-<span class="var">infile</span>  = <span class="fn">open</span>(<span class="str">"input.txt"</span>, <span class="str">"r"</span>)
-<span class="var">outfile</span> = <span class="fn">open</span>(<span class="str">"output.txt"</span>, <span class="str">"w"</span>)
+    <pre><span class="cm"># Challenge 1 — Mark Scheme (with subroutine)</span>
 
-<span class="kw">for</span> <span class="var">line</span> <span class="kw">in</span> <span class="var">infile</span>:
-    <span class="var">line</span>       = <span class="var">line</span>.<span class="fn">strip</span>()
+<span class="kw">def</span> <span class="fn">analyse_line</span>(<span class="var">line</span>):
+    <span class="str">"""Subroutine to analyse a single line and return a report string"""</span>
     <span class="var">upper_ver</span>  = <span class="var">line</span>.<span class="fn">upper</span>()
     <span class="var">length</span>     = <span class="fn">len</span>(<span class="var">line</span>)
     <span class="var">first</span>      = <span class="var">line</span>[<span class="num">0</span>] <span class="kw">if</span> <span class="var">line</span> <span class="kw">else</span> <span class="str">"-"</span>
     <span class="var">last</span>       = <span class="var">line</span>[<span class="num">-1</span>] <span class="kw">if</span> <span class="var">line</span> <span class="kw">else</span> <span class="str">"-"</span>
     <span class="var">all_alpha</span>  = <span class="var">line</span>.<span class="fn">replace</span>(<span class="str">" "</span>, <span class="str">""</span>).<span class="fn">isalpha</span>()
+    <span class="var">report</span> = <span class="str">f"Original : {line}\n"</span>
+    <span class="var">report</span> += <span class="str">f"Upper    : {upper_ver}\n"</span>
+    <span class="var">report</span> += <span class="str">f"Length   : {length} | First: {first} | Last: {last}\n"</span>
+    <span class="var">report</span> += <span class="str">f"Alpha?   : {all_alpha}\n---\n"</span>
+    <span class="kw">return</span> <span class="var">report</span>
 
-    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Original : {line}\n"</span>)
-    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Upper    : {upper_ver}\n"</span>)
-    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Length   : {length} | First: {first} | Last: {last}\n"</span>)
-    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Alpha?   : {all_alpha}\n"</span>)
-    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">"---\n"</span>)
+<span class="cm"># Main program</span>
+<span class="var">infile</span>  = <span class="fn">open</span>(<span class="str">"input.txt"</span>, <span class="str">"r"</span>)
+<span class="var">outfile</span> = <span class="fn">open</span>(<span class="str">"output.txt"</span>, <span class="str">"w"</span>)
+
+<span class="kw">for</span> <span class="var">line</span> <span class="kw">in</span> <span class="var">infile</span>:
+    <span class="var">line</span> = <span class="var">line</span>.<span class="fn">strip</span>()
+    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="fn">analyse_line</span>(<span class="var">line</span>))
 
 <span class="var">infile</span>.<span class="fn">close</span>()
 <span class="var">outfile</span>.<span class="fn">close</span>()</pre>
@@ -177,25 +215,38 @@
     <li class="req-item"><input type="checkbox" class="req-cb" id="r2d" onchange="updateProgress()"><label for="r2d">Writes matching lines in uppercase to output file</label></li>
     <li class="req-item"><input type="checkbox" class="req-cb" id="r2e" onchange="updateProgress()"><label for="r2e">Tracks and prints: match count and total char count</label></li>
     <li class="req-item"><input type="checkbox" class="req-cb" id="r2f" onchange="updateProgress()"><label for="r2f">Uses <code>if/else</code> to handle no matches found</label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r2g" onchange="updateProgress()"><label for="r2g"><b>Extension:</b> Uses a <code>def search_line()</code> subroutine</label></li>
   </ul>
 
   <button class="ms-btn" onclick="toggleMS('ms2')">👁 Show Mark Scheme</button>
   <div class="ms-box" id="ms2">
-    <pre><span class="cm"># Challenge 2 — Mark Scheme</span>
-<span class="var">keyword</span>    = <span class="fn">input</span>(<span class="str">"Search for: "</span>).<span class="fn">lower</span>()
+    <pre><span class="cm"># Challenge 2 — Mark Scheme (with subroutine)</span>
+
+<span class="kw">def</span> <span class="fn">search_line</span>(<span class="var">line</span>, <span class="var">keyword</span>):
+    <span class="str">"""Subroutine that searches for a keyword in a line (case-insensitive)"""</span>
+    <span class="var">line_lower</span> = <span class="var">line</span>.<span class="fn">lower</span>()
+    <span class="var">key_lower</span>  = <span class="var">keyword</span>.<span class="fn">lower</span>()
+    <span class="kw">if</span> <span class="var">key_lower</span> <span class="kw">in</span> <span class="var">line_lower</span>:
+        <span class="var">position</span> = <span class="var">line_lower</span>.<span class="fn">find</span>(<span class="var">key_lower</span>)
+        <span class="kw">return</span> <span class="kw">True</span>, <span class="var">position</span>
+    <span class="kw">return</span> <span class="kw">False</span>, -<span class="num">1</span>
+
+<span class="cm"># Main program</span>
+<span class="var">keyword</span>    = <span class="fn">input</span>(<span class="str">"Search for: "</span>)
 <span class="var">infile</span>     = <span class="fn">open</span>(<span class="str">"input.txt"</span>, <span class="str">"r"</span>)
 <span class="var">outfile</span>    = <span class="fn">open</span>(<span class="str">"output.txt"</span>, <span class="str">"w"</span>)
 <span class="var">count</span>      = <span class="num">0</span>
 <span class="var">total_chars</span>= <span class="num">0</span>
-<span class="var">first_pos</span>  = <span class="num">-1</span>
+<span class="var">first_pos</span>  = -<span class="num">1</span>
 
 <span class="kw">for</span> <span class="var">line</span> <span class="kw">in</span> <span class="var">infile</span>:
     <span class="var">line</span> = <span class="var">line</span>.<span class="fn">strip</span>()
-    <span class="kw">if</span> <span class="var">keyword</span> <span class="kw">in</span> <span class="var">line</span>.<span class="fn">lower</span>():
+    <span class="var">found</span>, <span class="var">pos</span> = <span class="fn">search_line</span>(<span class="var">line</span>, <span class="var">keyword</span>)
+    <span class="kw">if</span> <span class="var">found</span>:
         <span class="var">count</span> += <span class="num">1</span>
         <span class="var">total_chars</span> += <span class="fn">len</span>(<span class="var">line</span>)
         <span class="kw">if</span> <span class="var">count</span> == <span class="num">1</span>:
-            <span class="var">first_pos</span> = <span class="var">line</span>.<span class="fn">lower</span>().<span class="fn">find</span>(<span class="var">keyword</span>)
+            <span class="var">first_pos</span> = <span class="var">pos</span>
         <span class="var">outfile</span>.<span class="fn">write</span>(<span class="var">line</span>.<span class="fn">upper</span>() + <span class="str">"\n"</span>)
 
 <span class="var">infile</span>.<span class="fn">close</span>()
@@ -230,7 +281,35 @@
 
   <button class="ms-btn" onclick="toggleMS('ms3')">👁 Show Mark Scheme</button>
   <div class="ms-box" id="ms3">
-    <pre><span class="cm"># Challenge 3 — Mark Scheme</span>
+    <pre><span class="cm"># Challenge 3 — Mark Scheme (with subroutines)</span>
+
+<span class="kw">def</span> <span class="fn">count_chars</span>(<span class="var">line</span>):
+    <span class="str">"""Counts letters, digits, and spaces in a line"""</span>
+    <span class="var">letters</span> = <span class="num">0</span>
+    <span class="var">digits</span>  = <span class="num">0</span>
+    <span class="var">spaces</span>  = <span class="num">0</span>
+    <span class="kw">for</span> <span class="var">ch</span> <span class="kw">in</span> <span class="var">line</span>:
+        <span class="kw">if</span> <span class="var">ch</span>.<span class="fn">isalpha</span>(): <span class="var">letters</span> += <span class="num">1</span>
+        <span class="kw">elif</span> <span class="var">ch</span>.<span class="fn">isdigit</span>(): <span class="var">digits</span> += <span class="num">1</span>
+        <span class="kw">elif</span> <span class="var">ch</span>.<span class="fn">isspace</span>(): <span class="var">spaces</span> += <span class="num">1</span>
+    <span class="kw">return</span> <span class="var">letters</span>, <span class="var">digits</span>, <span class="var">spaces</span>
+
+<span class="kw">def</span> <span class="fn">write_line_report</span>(<span class="var">outfile</span>, <span class="var">num</span>, <span class="var">line</span>, <span class="var">letters</span>, <span class="var">digits</span>, <span class="var">spaces</span>):
+    <span class="str">"""Writes a formatted report for one line"""</span>
+    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Line {num}: {line}\n"</span>)
+    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"  Len:{len(line)} | Letters:{letters} | Digits:{digits} | Spaces:{spaces}\n"</span>)
+    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"  First 5: {line[0:5]} | Has digits: {digits > 0}\n\n"</span>)
+
+<span class="kw">def</span> <span class="fn">write_summary</span>(<span class="var">outfile</span>, <span class="var">line_count</span>, <span class="var">total_letters</span>, <span class="var">total_digits</span>, <span class="var">alpha_lines</span>, <span class="var">longest</span>):
+    <span class="str">"""Writes the final summary section"""</span>
+    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">"=== SUMMARY ===\n"</span>)
+    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Total lines    : {line_count}\n"</span>)
+    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Total letters  : {total_letters}\n"</span>)
+    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Total digits   : {total_digits}\n"</span>)
+    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Alpha-only lines: {alpha_lines}\n"</span>)
+    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Longest line   : {longest}\n"</span>)
+
+<span class="cm"># Main program</span>
 <span class="var">infile</span>    = <span class="fn">open</span>(<span class="str">"input.txt"</span>, <span class="str">"r"</span>)
 <span class="var">outfile</span>   = <span class="fn">open</span>(<span class="str">"output.txt"</span>, <span class="str">"w"</span>)
 <span class="var">longest</span>   = <span class="str">""</span>
@@ -241,33 +320,101 @@
 
 <span class="kw">for</span> <span class="var">line</span> <span class="kw">in</span> <span class="var">infile</span>:
     <span class="var">line</span>    = <span class="var">line</span>.<span class="fn">strip</span>()
-    <span class="var">letters</span> = <span class="num">0</span>
-    <span class="var">digits</span>  = <span class="num">0</span>
-    <span class="var">spaces</span>  = <span class="num">0</span>
     <span class="var">line_count</span> += <span class="num">1</span>
-
-    <span class="kw">for</span> <span class="var">ch</span> <span class="kw">in</span> <span class="var">line</span>:
-        <span class="kw">if</span> <span class="var">ch</span>.<span class="fn">isalpha</span>(): <span class="var">letters</span> += <span class="num">1</span>
-        <span class="kw">elif</span> <span class="var">ch</span>.<span class="fn">isdigit</span>(): <span class="var">digits</span> += <span class="num">1</span>
-        <span class="kw">elif</span> <span class="var">ch</span>.<span class="fn">isspace</span>(): <span class="var">spaces</span> += <span class="num">1</span>
-
+    <span class="var">letters</span>, <span class="var">digits</span>, <span class="var">spaces</span> = <span class="fn">count_chars</span>(<span class="var">line</span>)
     <span class="var">total_letters</span> += <span class="var">letters</span>
     <span class="var">total_digits</span>  += <span class="var">digits</span>
     <span class="kw">if</span> <span class="var">digits</span> == <span class="num">0</span>: <span class="var">alpha_lines</span> += <span class="num">1</span>
     <span class="kw">if</span> <span class="fn">len</span>(<span class="var">line</span>) > <span class="fn">len</span>(<span class="var">longest</span>): <span class="var">longest</span> = <span class="var">line</span>
+    <span class="fn">write_line_report</span>(<span class="var">outfile</span>, <span class="var">line_count</span>, <span class="var">line</span>, <span class="var">letters</span>, <span class="var">digits</span>, <span class="var">spaces</span>)
 
-    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Line {line_count}: {line}\n"</span>)
-    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"  Len:{len(line)} | Letters:{letters} | Digits:{digits} | Spaces:{spaces}\n"</span>)
-    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"  First 5: {line[0:5]} | Has digits: {digits > 0}\n\n"</span>)
-
-<span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">"=== SUMMARY ===\n"</span>)
-<span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Total lines    : {line_count}\n"</span>)
-<span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Total letters  : {total_letters}\n"</span>)
-<span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Total digits   : {total_digits}\n"</span>)
-<span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Alpha-only lines: {alpha_lines}\n"</span>)
-<span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Longest line   : {longest}\n"</span>)
+<span class="fn">write_summary</span>(<span class="var">outfile</span>, <span class="var">line_count</span>, <span class="var">total_letters</span>, <span class="var">total_digits</span>, <span class="var">alpha_lines</span>, <span class="var">longest</span>)
 <span class="var">infile</span>.<span class="fn">close</span>()
 <span class="var">outfile</span>.<span class="fn">close</span>()</pre>
+  </div>
+</div>
+
+<!-- CHALLENGE 4 -->
+<div class="challenge ch3" style="border:1px solid rgba(107,203,119,0.3);">
+  <div class="ch-header">
+    <span class="ch-tag">CHALLENGE 04 · SUPER EXTENSION</span>
+    <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+  </div>
+  <h3>The Menu-Driven Text Tool</h3>
+  <p>Write a program with a <b>menu</b> that lets the user choose different text operations. Use <b>subroutines</b> for each operation. The program should loop until the user chooses to quit.</p>
+
+  <ul class="req-list">
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r4a" onchange="updateProgress()"><label for="r4a">Displays a menu with at least 4 options (e.g. uppercase converter, word counter, digit finder, keyword search)</label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r4b" onchange="updateProgress()"><label for="r4b">Uses <code>input()</code> to get the user's menu choice</label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r4c" onchange="updateProgress()"><label for="r4c">Each menu option calls a different <b>subroutine</b> using <code>def</code></label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r4d" onchange="updateProgress()"><label for="r4d">Uses a <code>while</code> loop so the menu repeats until the user quits</label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r4e" onchange="updateProgress()"><label for="r4e">Reads from <code>input.txt</code> and writes results to <code>output.txt</code></label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r4f" onchange="updateProgress()"><label for="r4f">Handles invalid menu choices with an error message</label></li>
+  </ul>
+
+  <button class="ms-btn" onclick="toggleMS('ms4')">👁 Show Mark Scheme</button>
+  <div class="ms-box" id="ms4">
+    <pre><span class="cm"># Challenge 4 — Mark Scheme</span>
+
+<span class="kw">def</span> <span class="fn">uppercase_all</span>():
+    <span class="var">infile</span> = <span class="fn">open</span>(<span class="str">"input.txt"</span>, <span class="str">"r"</span>)
+    <span class="var">outfile</span> = <span class="fn">open</span>(<span class="str">"output.txt"</span>, <span class="str">"w"</span>)
+    <span class="kw">for</span> <span class="var">line</span> <span class="kw">in</span> <span class="var">infile</span>:
+        <span class="var">outfile</span>.<span class="fn">write</span>(<span class="var">line</span>.<span class="fn">strip</span>().<span class="fn">upper</span>() + <span class="str">"\n"</span>)
+    <span class="var">infile</span>.<span class="fn">close</span>()
+    <span class="var">outfile</span>.<span class="fn">close</span>()
+    <span class="fn">print</span>(<span class="str">"Done! All lines converted to uppercase."</span>)
+
+<span class="kw">def</span> <span class="fn">count_words</span>():
+    <span class="var">infile</span> = <span class="fn">open</span>(<span class="str">"input.txt"</span>, <span class="str">"r"</span>)
+    <span class="var">total</span> = <span class="num">0</span>
+    <span class="kw">for</span> <span class="var">line</span> <span class="kw">in</span> <span class="var">infile</span>:
+        <span class="var">words</span> = <span class="var">line</span>.<span class="fn">strip</span>().<span class="fn">split</span>()
+        <span class="var">total</span> += <span class="fn">len</span>(<span class="var">words</span>)
+        <span class="fn">print</span>(<span class="str">f"{line.strip()} → {len(words)} words"</span>)
+    <span class="var">infile</span>.<span class="fn">close</span>()
+    <span class="fn">print</span>(<span class="str">f"Total words: {total}"</span>)
+
+<span class="kw">def</span> <span class="fn">find_digits</span>():
+    <span class="var">infile</span> = <span class="fn">open</span>(<span class="str">"input.txt"</span>, <span class="str">"r"</span>)
+    <span class="kw">for</span> <span class="var">line</span> <span class="kw">in</span> <span class="var">infile</span>:
+        <span class="var">line</span> = <span class="var">line</span>.<span class="fn">strip</span>()
+        <span class="var">count</span> = <span class="num">0</span>
+        <span class="kw">for</span> <span class="var">ch</span> <span class="kw">in</span> <span class="var">line</span>:
+            <span class="kw">if</span> <span class="var">ch</span>.<span class="fn">isdigit</span>(): <span class="var">count</span> += <span class="num">1</span>
+        <span class="kw">if</span> <span class="var">count</span> > <span class="num">0</span>:
+            <span class="fn">print</span>(<span class="str">f"{line} → {count} digits"</span>)
+    <span class="var">infile</span>.<span class="fn">close</span>()
+
+<span class="kw">def</span> <span class="fn">keyword_search</span>():
+    <span class="var">keyword</span> = <span class="fn">input</span>(<span class="str">"Enter keyword: "</span>)
+    <span class="var">infile</span> = <span class="fn">open</span>(<span class="str">"input.txt"</span>, <span class="str">"r"</span>)
+    <span class="var">count</span> = <span class="num">0</span>
+    <span class="kw">for</span> <span class="var">line</span> <span class="kw">in</span> <span class="var">infile</span>:
+        <span class="kw">if</span> <span class="var">keyword</span>.<span class="fn">lower</span>() <span class="kw">in</span> <span class="var">line</span>.<span class="fn">lower</span>():
+            <span class="fn">print</span>(<span class="str">f"Found: {line.strip()}"</span>)
+            <span class="var">count</span> += <span class="num">1</span>
+    <span class="var">infile</span>.<span class="fn">close</span>()
+    <span class="fn">print</span>(<span class="str">f"Total matches: {count}"</span>)
+
+<span class="cm"># Main menu loop</span>
+<span class="var">running</span> = <span class="kw">True</span>
+<span class="kw">while</span> <span class="var">running</span>:
+    <span class="fn">print</span>(<span class="str">"\n=== Text Tool Menu ==="</span>)
+    <span class="fn">print</span>(<span class="str">"1. Convert all to UPPERCASE"</span>)
+    <span class="fn">print</span>(<span class="str">"2. Count words per line"</span>)
+    <span class="fn">print</span>(<span class="str">"3. Find lines with digits"</span>)
+    <span class="fn">print</span>(<span class="str">"4. Search for a keyword"</span>)
+    <span class="fn">print</span>(<span class="str">"5. Quit"</span>)
+
+    <span class="var">choice</span> = <span class="fn">input</span>(<span class="str">"Choose (1-5): "</span>)
+
+    <span class="kw">if</span> <span class="var">choice</span> == <span class="str">"1"</span>: <span class="fn">uppercase_all</span>()
+    <span class="kw">elif</span> <span class="var">choice</span> == <span class="str">"2"</span>: <span class="fn">count_words</span>()
+    <span class="kw">elif</span> <span class="var">choice</span> == <span class="str">"3"</span>: <span class="fn">find_digits</span>()
+    <span class="kw">elif</span> <span class="var">choice</span> == <span class="str">"4"</span>: <span class="fn">keyword_search</span>()
+    <span class="kw">elif</span> <span class="var">choice</span> == <span class="str">"5"</span>: <span class="var">running</span> = <span class="kw">False</span>
+    <span class="kw">else</span>: <span class="fn">print</span>(<span class="str">"Invalid choice. Try again."</span>)</pre>
   </div>
 </div>
 
@@ -320,9 +467,17 @@
 <script>
 function toggleMS(id){document.getElementById(id).classList.toggle('show');}
 
+function copyCode(btn,id){
+  const pre=document.getElementById(id);
+  navigator.clipboard.writeText(pre.innerText).then(()=>{
+    btn.textContent='Copied!';
+    setTimeout(()=>btn.textContent='Copy',2000);
+  });
+}
+
 function updateProgress(){
   const grps=[
-    {pfx:'r1',max:6,pid:'p1'},{pfx:'r2',max:6,pid:'p2'},{pfx:'r3',max:6,pid:'p3'}
+    {pfx:'r1',max:7,pid:'p1'},{pfx:'r2',max:7,pid:'p2'},{pfx:'r3',max:6,pid:'p3'},{pfx:'r4',max:6,pid:'p4'}
   ];
   let totalDone=0,totalAll=0;
   grps.forEach(g=>{

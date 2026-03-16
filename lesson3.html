@@ -134,6 +134,24 @@
   • Syntax: <code style="font-family:var(--mono);">position = my_string.find("search_word")</code>
 </div>
 
+<div class="info-box green">
+  <b>📁 Create input.txt for this lesson:</b> Open Notepad, paste the text below, and save as <code style="font-family:var(--mono)">input.txt</code> in the same folder as your Python file.
+</div>
+<div class="code-block">
+  <div class="code-header">
+    <span class="code-lang">TEXT — input.txt</span>
+    <button class="copy-btn" onclick="copyCode(this,'txtfile3')">Copy</button>
+  </div>
+  <pre id="txtfile3">The island of Jersey is beautiful
+Python is a great programming language
+I love computer science at school
+Jersey has amazing beaches and cliffs
+My favourite subject is not island studies
+Programming in Python makes me happy
+The Channel Islands include Jersey and Guernsey
+GCSE exams start in May</pre>
+</div>
+
 <!-- FILL THE GAPS -->
 <div class="section-title">✏️ Fill in the Gaps <span class="pill">ACTIVITY 2</span></div>
 <p style="color:var(--muted);font-size:0.88rem;margin-bottom:14px;">Complete the code. This time you have <b>fewer hints</b> — think carefully!</p>
@@ -190,8 +208,53 @@ output_file.close()
   <div class="hint-box" id="h2">Use a counter variable: <code style="font-family:var(--mono)">count = 0</code> before the loop, then <code style="font-family:var(--mono)">count += 1</code> each time you find a match.</div>
 </div>
 
+<hr class="divider">
+<div class="section-title">🔧 Using Subroutines (Functions) <span class="pill">ACTIVITY 5</span></div>
+<div class="info-box">
+  <b>📌 What is a subroutine?</b><br>
+  A <b>subroutine</b> (also called a <b>function</b>) is a reusable block of code that performs a specific task. In Python, we create subroutines using the <code style="font-family:var(--mono);">def</code> keyword. This helps us:<br>
+  • <b>Avoid repeating code</b> — write once, use many times<br>
+  • <b>Organise our program</b> — break it into smaller, named blocks<br>
+  • <b>Make code easier to read</b> — each function has a clear purpose
+</div>
+
+<div class="code-block">
+  <div class="code-header">
+    <span class="code-lang">Python — using subroutines</span>
+    <button class="copy-btn" onclick="copyCode(this,'code-sub3')">Copy</button>
+  </div>
+  <pre id="code-sub3"><span class="cm"># Define a subroutine to search for a word in a line</span>
+<span class="kw">def</span> <span class="fn">search_line</span>(<span class="var">line</span>, <span class="var">keyword</span>):
+    <span class="var">position</span> = <span class="var">line</span>.<span class="fn">lower</span>().<span class="fn">find</span>(<span class="var">keyword</span>.<span class="fn">lower</span>())
+    <span class="kw">if</span> <span class="var">position</span> != -<span class="num">1</span>:
+        <span class="fn">print</span>(<span class="str">f"Found '{keyword}' at position {position} in: {line}"</span>)
+        <span class="kw">return</span> <span class="kw">True</span>
+    <span class="kw">else</span>:
+        <span class="kw">return</span> <span class="kw">False</span>
+
+<span class="cm"># Main program — uses the subroutine</span>
+<span class="var">input_file</span> = <span class="fn">open</span>(<span class="str">"input.txt"</span>, <span class="str">"r"</span>)
+<span class="var">count</span> = <span class="num">0</span>
+
+<span class="kw">for</span> <span class="var">line</span> <span class="kw">in</span> <span class="var">input_file</span>:
+    <span class="var">line</span> = <span class="var">line</span>.<span class="fn">strip</span>()
+    <span class="kw">if</span> <span class="fn">search_line</span>(<span class="var">line</span>, <span class="str">"Jersey"</span>):
+        <span class="var">count</span> += <span class="num">1</span>
+
+<span class="fn">print</span>(<span class="str">f"\nTotal matches: {count}"</span>)
+<span class="var">input_file</span>.<span class="fn">close</span>()</pre>
+</div>
+
+<div class="info-box yellow">
+  <b>🔑 Key points about subroutines:</b><br>
+  • <code style="font-family:var(--mono);">def search_line(line, keyword):</code> — defines a function with <b>parameters</b><br>
+  • <code style="font-family:var(--mono);">return True</code> — sends a value back to where the function was called<br>
+  • <code style="font-family:var(--mono);">search_line(line, "Jersey")</code> — calls the function with <b>arguments</b><br>
+  • The function can be called many times with different keywords!
+</div>
+
 <!-- QUIZ -->
-<div class="section-title">🧠 Quick Quiz <span class="pill">ACTIVITY 5</span></div>
+<div class="section-title">🧠 Quick Quiz <span class="pill">ACTIVITY 6</span></div>
 <div class="quiz-card">
   <div class="quiz-q">What does <code>s = "hello"; s.find("ll")</code> return?</div>
   <div class="quiz-options">
@@ -233,6 +296,59 @@ output_file.close()
   <div class="quiz-feedback" id="fb-q4"></div>
 </div>
 
+<hr class="divider">
+<div class="section-title">🔮 Predict the Output <span class="pill">ACTIVITY 7</span></div>
+<p style="color:var(--muted);font-size:0.88rem;margin-bottom:16px;">What does each snippet print? Think carefully before clicking!</p>
+
+<div class="quiz-card">
+  <div class="quiz-q">What does this print?<br><code>sentence = "I love Python"<br>pos = sentence.find("love")<br>print(pos)</code></div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'p1',false)">0</div>
+    <div class="quiz-opt" onclick="answer(this,'p1',true)">2</div>
+    <div class="quiz-opt" onclick="answer(this,'p1',false)">4</div>
+    <div class="quiz-opt" onclick="answer(this,'p1',false)">True</div>
+  </div>
+  <div class="quiz-feedback" id="fb-p1"></div>
+</div>
+
+<div class="quiz-card">
+  <div class="quiz-q">What does this print?<br><code>word = "Hello"<br>print("hello" in word)</code></div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'p2',false)">True</div>
+    <div class="quiz-opt" onclick="answer(this,'p2',true)">False</div>
+    <div class="quiz-opt" onclick="answer(this,'p2',false)">0</div>
+    <div class="quiz-opt" onclick="answer(this,'p2',false)">An error</div>
+  </div>
+  <div class="quiz-feedback" id="fb-p2"></div>
+</div>
+
+<div class="quiz-card">
+  <div class="quiz-q">What does this print?<br><code>def check(text, word):<br>&nbsp;&nbsp;&nbsp;&nbsp;return word in text.lower()<br><br>result = check("Hello World", "hello")<br>print(result)</code></div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'p3',true)">True</div>
+    <div class="quiz-opt" onclick="answer(this,'p3',false)">False</div>
+    <div class="quiz-opt" onclick="answer(this,'p3',false)">hello</div>
+    <div class="quiz-opt" onclick="answer(this,'p3',false)">An error</div>
+  </div>
+  <div class="quiz-feedback" id="fb-p3"></div>
+</div>
+
+<hr class="divider">
+<div class="section-title">🚀 Extension Activity <span class="pill">STRETCH</span></div>
+<div class="write-task">
+  <h3>Challenge: Multi-Keyword Search with Subroutine</h3>
+  <p>Write a program that uses a <b>subroutine</b> to search for <b>multiple keywords</b> in each line of input.txt. The subroutine should take a line and a keyword, and return True/False.</p>
+  <p>Your program should:</p>
+  <p>1. Define a <code style="font-family:var(--mono)">def search(line, keyword)</code> subroutine<br>
+  2. Ask the user for 3 different keywords using <code style="font-family:var(--mono)">input()</code><br>
+  3. Read each line from input.txt<br>
+  4. Call the subroutine for each keyword on each line<br>
+  5. Write matching lines to output.txt with which keyword was found<br>
+  6. Print a summary: how many matches for each keyword</p>
+  <button class="hint-btn" onclick="toggleHint('hex1')">💡 Hint: structure</button>
+  <div class="hint-box" id="hex1">Use three counter variables (one per keyword). Call your search function three times per line — once for each keyword. Use <code style="font-family:var(--mono)">line.lower()</code> inside the subroutine for case-insensitive matching.</div>
+</div>
+
 <div style="display:flex;justify-content:space-between;padding:20px 0 60px;">
   <a href="lesson2.html" style="color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:0.8rem;">← Lesson 2</a>
   <a href="lesson4.html" style="color:var(--accent);text-decoration:none;font-family:var(--mono);font-size:0.8rem;background:rgba(107,203,119,0.1);border:1px solid rgba(107,203,119,0.3);padding:10px 20px;border-radius:8px;">Lesson 4: Checking Characters →</a>
@@ -240,6 +356,14 @@ output_file.close()
 </div>
 
 <script>
+function copyCode(btn,id){
+  const pre=document.getElementById(id);
+  navigator.clipboard.writeText(pre.innerText).then(()=>{
+    btn.textContent='Copied!';
+    setTimeout(()=>btn.textContent='Copy',2000);
+  });
+}
+
 const sentence="The cat sat on the mat in Jersey";
 function updateFind(){
   const q=document.getElementById('find-input').value;
@@ -311,7 +435,10 @@ function answer(el,qid,correct){
     q1:{ok:'✅ "ll" starts at index 2 (h=0, e=1, l=2).',fail:'❌ Count: h=0, e=1, l=2 — so "ll" starts at index 2.'},
     q2:{ok:'✅ Correct! -1 means "not found".',fail:'❌ When the substring is not found, .find() returns -1.'},
     q3:{ok:'✅ The "in" operator is the most readable way to check membership.',fail:'❌ Use the "in" operator: "Python" in line'},
-    q4:{ok:'✅ Correct! .find() IS case-sensitive. "Hello" ≠ "hello".',fail:'❌ .find() is case-sensitive. "Hello" and "hello" are different strings.'}
+    q4:{ok:'✅ Correct! .find() IS case-sensitive. "Hello" ≠ "hello".',fail:'❌ .find() is case-sensitive. "Hello" and "hello" are different strings.'},
+    p1:{ok:'✅ Correct! "love" starts at index 2. Count: I=0, space=1, l=2.',fail:'❌ Count from 0: I=0, (space)=1, l=2. So .find("love") returns 2.'},
+    p2:{ok:'✅ Correct! The "in" operator is case-sensitive. "hello" ≠ "Hello".',fail:'❌ The "in" operator is case-sensitive! "hello" is NOT found in "Hello".'},
+    p3:{ok:'✅ Correct! The function converts text to lowercase first, so "hello" IS found in "hello world".',fail:'❌ The function uses .lower() to convert text first. "hello" is found in "hello world" — returns True.'}
   };
   fb.textContent=msgs[qid][correct?'ok':'fail'];
 }
