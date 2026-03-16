@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 6 — Final Challenge</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0f0e17;--card:#1a1828;--card2:#201e30;--accent:#ff9f1c;--accent2:#ff6b6b;--accent3:#6bcb77;--accent4:#ffd93d;--accent5:#c77dff;--text:#fffffe;--muted:#a7a9be;--border:rgba(255,255,255,0.08);--mono:'Space Mono',monospace;--body:'Nunito',sans-serif;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(255,159,28,0.06),transparent 60%);pointer-events:none;}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(15,14,23,0.9);backdrop-filter:blur(12px);z-index:100;}
+  .nav-home,.nav-next{color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:0.75rem;transition:color 0.2s;}
+  .nav-home:hover{color:var(--text);}
+  .nav-lesson{font-family:var(--mono);font-size:0.75rem;color:var(--accent);letter-spacing:2px;}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px;}
+  .hero{padding:40px 0 20px;}
+  .lesson-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,159,28,0.12);border:1px solid rgba(255,159,28,0.3);color:var(--accent);font-family:var(--mono);font-size:0.72rem;padding:5px 14px;border-radius:20px;margin-bottom:18px;letter-spacing:1px;}
+  h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.15;margin-bottom:12px;}
+  h1 em{color:var(--accent);font-style:normal;}
+  .hero-sub{color:var(--muted);font-size:1rem;line-height:1.7;max-width:600px;}
+  .support-indicator{display:inline-flex;align-items:center;gap:8px;margin-top:18px;background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.25);border-radius:8px;padding:8px 16px;font-size:0.85rem;color:var(--accent2);}
+  .section-title{font-size:1.1rem;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+  .pill{font-family:var(--mono);font-size:0.65rem;background:rgba(255,159,28,0.15);color:var(--accent);padding:3px 10px;border-radius:20px;letter-spacing:1px;}
+  .info-box{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:12px;padding:18px 22px;margin-bottom:16px;font-size:0.9rem;line-height:1.7;color:var(--muted);}
+  .info-box b{color:var(--text);}.info-box.green{border-left-color:var(--accent3);}.info-box.red{border-left-color:var(--accent2);}.info-box.purple{border-left-color:var(--accent5);}
+  .divider{border:none;border-top:1px solid var(--border);margin:28px 0;}
+  /* STAR RATING */
+  .stars{display:flex;gap:6px;margin-bottom:6px;}
+  .star{color:var(--accent4);font-size:1.1rem;}
+  .star.empty{color:rgba(255,255,255,0.15);}
+  /* CHALLENGE CARDS */
+  .challenge{background:var(--card);border-radius:16px;padding:28px;margin-bottom:20px;position:relative;overflow:hidden;border:1px solid var(--border);}
+  .challenge::before{content:'';position:absolute;inset:0;opacity:0.04;}
+  .ch1::before{background:linear-gradient(135deg,#ff9f1c,transparent);}
+  .ch2::before{background:linear-gradient(135deg,#ff6b6b,transparent);}
+  .ch3::before{background:linear-gradient(135deg,#c77dff,transparent);}
+  .ch-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+  .ch-tag{font-family:var(--mono);font-size:0.7rem;color:var(--accent);letter-spacing:2px;}
+  .challenge h3{font-size:1.1rem;font-weight:800;margin-bottom:10px;}
+  .challenge p{font-size:0.9rem;color:var(--muted);line-height:1.7;margin-bottom:16px;}
+  /* REQUIREMENTS LIST */
+  .req-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+  .req-item{display:flex;align-items:flex-start;gap:10px;font-size:0.88rem;color:var(--muted);padding:10px 14px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid var(--border);}
+  .req-cb{width:18px;height:18px;border-radius:4px;border:1px solid rgba(255,255,255,0.2);background:transparent;cursor:pointer;flex-shrink:0;margin-top:1px;accent-color:var(--accent);}
+  .req-item label{cursor:pointer;line-height:1.5;}
+  .req-item label code{font-family:var(--mono);font-size:0.82em;color:var(--accent4);background:rgba(255,217,61,0.08);padding:1px 5px;border-radius:3px;}
+  /* MARKSCHEME */
+  .ms-btn{font-family:var(--mono);font-size:0.72rem;background:rgba(255,159,28,0.1);color:var(--accent);border:1px solid rgba(255,159,28,0.3);padding:8px 18px;border-radius:8px;cursor:pointer;transition:all 0.2s;margin-bottom:6px;margin-right:8px;}
+  .ms-btn:hover{background:rgba(255,159,28,0.2);}
+  .ms-box{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:16px;display:none;margin-top:12px;}
+  .ms-box.show{display:block;}
+  .ms-box pre{background:transparent;padding:0;font-size:0.78rem;line-height:1.9;color:#c9d1d9;white-space:pre-wrap;}
+  .kw{color:#ff79c6;}.fn{color:#50fa7b;}.str{color:#f1fa8c;}.cm{color:#6272a4;font-style:italic;}.num{color:#bd93f9;}.var{color:#8be9fd;}
+  /* PEER REVIEW */
+  .peer-box{background:var(--card);border:1px dashed rgba(107,203,119,0.3);border-radius:14px;padding:24px;margin-bottom:20px;}
+  .peer-box h3{font-size:1rem;font-weight:800;color:var(--accent3);margin-bottom:14px;}
+  .peer-criteria{display:flex;flex-direction:column;gap:10px;}
+  .peer-row{display:flex;align-items:center;gap:12px;font-size:0.88rem;color:var(--muted);}
+  .peer-stars{display:flex;gap:4px;}
+  .peer-star{cursor:pointer;font-size:1.2rem;color:rgba(255,255,255,0.15);transition:color 0.15s;}
+  .peer-star:hover,.peer-star.lit{color:var(--accent4);}
+  /* PROGRESS */
+  .progress-overall{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:24px;}
+  .progress-overall h3{font-size:0.9rem;font-weight:700;margin-bottom:16px;color:var(--muted);}
+  .prog-item{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+  .prog-item span{font-size:0.8rem;color:var(--muted);width:160px;flex-shrink:0;}
+  .prog-track{flex:1;height:5px;background:rgba(255,255,255,0.06);border-radius:5px;overflow:hidden;}
+  .prog-fill{height:100%;border-radius:5px;transition:width 0.4s;}
+  /* CELEBRATION */
+  .celebration{text-align:center;padding:40px 20px;background:var(--card);border:1px solid var(--border);border-radius:16px;margin-bottom:30px;position:relative;overflow:hidden;display:none;}
+  .celebration.show{display:block;}
+  .celebration::before{content:'🏆';font-size:4rem;display:block;margin-bottom:16px;}
+  .celebration h2{font-size:1.5rem;font-weight:900;color:var(--accent);margin-bottom:10px;}
+  .celebration p{color:var(--muted);font-size:0.95rem;}
+  ::-webkit-scrollbar{width:6px;height:6px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-home">← All Lessons</a>
+  <span class="nav-lesson">LESSON 06 · FINAL</span>
+  <span style="font-family:var(--mono);font-size:0.75rem;color:var(--accent)">🏆</span>
+</nav>
+
+<div class="wrap">
+<div class="hero">
+  <div class="lesson-badge">🔴 LESSON 06 · FULLY INDEPENDENT</div>
+  <h1>The Final <em>Challenge</em></h1>
+  <p class="hero-sub">No starter code. No fill-in-the-gaps. Just you and Python. Design, write, test, and evaluate three complete programs from scratch.</p>
+  <div class="support-indicator">🔴 No code provided — full independence required</div>
+</div>
+
+<!-- CELEBRATION (hidden, shown on completion) -->
+<div class="celebration" id="celebration">
+  <h2>Unit Complete!</h2>
+  <p>You've completed all 6 lessons on String Manipulation. You can now read files, process strings using the Edexcel PLS functions, and write results back — from scratch!</p>
+</div>
+
+<!-- OVERALL PROGRESS -->
+<div class="progress-overall">
+  <h3>📊 Your Progress This Lesson</h3>
+  <div class="prog-item"><span>Challenge 1</span><div class="prog-track"><div class="prog-fill" id="p1" style="width:0%;background:var(--accent)"></div></div></div>
+  <div class="prog-item"><span>Challenge 2</span><div class="prog-track"><div class="prog-fill" id="p2" style="width:0%;background:#ff6b6b"></div></div></div>
+  <div class="prog-item"><span>Challenge 3 ⭐</span><div class="prog-track"><div class="prog-fill" id="p3" style="width:0%;background:var(--accent5)"></div></div></div>
+</div>
+
+<div class="info-box red">
+  <b>⚠️ Rules for this lesson:</b><br>
+  • No code is provided — you write everything from scratch in IDLE<br>
+  • Use the Edexcel PLS string functions: <code style="font-family:var(--mono)">upper(), lower(), len(), find(), isalpha(), isdigit(), isspace()</code><br>
+  • Mark schemes are available — but try each challenge fully before looking<br>
+  • Tick off each requirement as you complete it
+</div>
+
+<hr class="divider">
+
+<!-- CHALLENGE 1 -->
+<div class="section-title">🏅 Challenges <span class="pill">WRITE FROM SCRATCH</span></div>
+
+<div class="challenge ch1">
+  <div class="ch-header">
+    <span class="ch-tag">CHALLENGE 01</span>
+    <div class="stars"><span class="star">★</span><span class="star empty">★</span><span class="star empty">★</span></div>
+  </div>
+  <h3>The Text Transformer</h3>
+  <p>Write a program that reads <code style="font-family:var(--mono)">input.txt</code> line by line. For each line, it should: strip whitespace, convert to uppercase, find the length, get the first and last characters, and check if the whole line (after stripping) is alphabetical. Write a formatted summary of each line to <code style="font-family:var(--mono)">output.txt</code>.</p>
+
+  <ul class="req-list">
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r1a" onchange="updateProgress()"><label for="r1a">Opens <code>input.txt</code> for reading and <code>output.txt</code> for writing</label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r1b" onchange="updateProgress()"><label for="r1b">Uses a <code>for</code> loop to go through each line</label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r1c" onchange="updateProgress()"><label for="r1c">Uses <code>.strip()</code>, <code>.upper()</code>, and <code>len()</code></label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r1d" onchange="updateProgress()"><label for="r1d">Accesses <code>line[0]</code> and <code>line[-1]</code></label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r1e" onchange="updateProgress()"><label for="r1e">Uses <code>.isalpha()</code> and writes result to output file</label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r1f" onchange="updateProgress()"><label for="r1f">Closes both files correctly</label></li>
+  </ul>
+
+  <button class="ms-btn" onclick="toggleMS('ms1')">👁 Show Mark Scheme</button>
+  <div class="ms-box" id="ms1">
+    <pre><span class="cm"># Challenge 1 — Mark Scheme</span>
+<span class="var">infile</span>  = <span class="fn">open</span>(<span class="str">"input.txt"</span>, <span class="str">"r"</span>)
+<span class="var">outfile</span> = <span class="fn">open</span>(<span class="str">"output.txt"</span>, <span class="str">"w"</span>)
+
+<span class="kw">for</span> <span class="var">line</span> <span class="kw">in</span> <span class="var">infile</span>:
+    <span class="var">line</span>       = <span class="var">line</span>.<span class="fn">strip</span>()
+    <span class="var">upper_ver</span>  = <span class="var">line</span>.<span class="fn">upper</span>()
+    <span class="var">length</span>     = <span class="fn">len</span>(<span class="var">line</span>)
+    <span class="var">first</span>      = <span class="var">line</span>[<span class="num">0</span>] <span class="kw">if</span> <span class="var">line</span> <span class="kw">else</span> <span class="str">"-"</span>
+    <span class="var">last</span>       = <span class="var">line</span>[<span class="num">-1</span>] <span class="kw">if</span> <span class="var">line</span> <span class="kw">else</span> <span class="str">"-"</span>
+    <span class="var">all_alpha</span>  = <span class="var">line</span>.<span class="fn">replace</span>(<span class="str">" "</span>, <span class="str">""</span>).<span class="fn">isalpha</span>()
+
+    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Original : {line}\n"</span>)
+    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Upper    : {upper_ver}\n"</span>)
+    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Length   : {length} | First: {first} | Last: {last}\n"</span>)
+    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Alpha?   : {all_alpha}\n"</span>)
+    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">"---\n"</span>)
+
+<span class="var">infile</span>.<span class="fn">close</span>()
+<span class="var">outfile</span>.<span class="fn">close</span>()</pre>
+  </div>
+</div>
+
+<!-- CHALLENGE 2 -->
+<div class="challenge ch2">
+  <div class="ch-header">
+    <span class="ch-tag">CHALLENGE 02</span>
+    <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star empty">★</span></div>
+  </div>
+  <h3>The Smart Filter</h3>
+  <p>Write a program that: asks the user for a search keyword, reads <code style="font-family:var(--mono)">input.txt</code>, and writes lines containing that keyword (case-insensitive) to <code style="font-family:var(--mono)">output.txt</code> in uppercase. Also display: how many lines matched, the total character count of matching lines, and the position of the keyword in the first matching line.</p>
+
+  <ul class="req-list">
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r2a" onchange="updateProgress()"><label for="r2a">Uses <code>input()</code> to get the keyword from the user</label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r2b" onchange="updateProgress()"><label for="r2b">Searches case-insensitively using <code>.lower()</code></label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r2c" onchange="updateProgress()"><label for="r2c">Uses <code>.find()</code> to get position in the first match</label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r2d" onchange="updateProgress()"><label for="r2d">Writes matching lines in uppercase to output file</label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r2e" onchange="updateProgress()"><label for="r2e">Tracks and prints: match count and total char count</label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r2f" onchange="updateProgress()"><label for="r2f">Uses <code>if/else</code> to handle no matches found</label></li>
+  </ul>
+
+  <button class="ms-btn" onclick="toggleMS('ms2')">👁 Show Mark Scheme</button>
+  <div class="ms-box" id="ms2">
+    <pre><span class="cm"># Challenge 2 — Mark Scheme</span>
+<span class="var">keyword</span>    = <span class="fn">input</span>(<span class="str">"Search for: "</span>).<span class="fn">lower</span>()
+<span class="var">infile</span>     = <span class="fn">open</span>(<span class="str">"input.txt"</span>, <span class="str">"r"</span>)
+<span class="var">outfile</span>    = <span class="fn">open</span>(<span class="str">"output.txt"</span>, <span class="str">"w"</span>)
+<span class="var">count</span>      = <span class="num">0</span>
+<span class="var">total_chars</span>= <span class="num">0</span>
+<span class="var">first_pos</span>  = <span class="num">-1</span>
+
+<span class="kw">for</span> <span class="var">line</span> <span class="kw">in</span> <span class="var">infile</span>:
+    <span class="var">line</span> = <span class="var">line</span>.<span class="fn">strip</span>()
+    <span class="kw">if</span> <span class="var">keyword</span> <span class="kw">in</span> <span class="var">line</span>.<span class="fn">lower</span>():
+        <span class="var">count</span> += <span class="num">1</span>
+        <span class="var">total_chars</span> += <span class="fn">len</span>(<span class="var">line</span>)
+        <span class="kw">if</span> <span class="var">count</span> == <span class="num">1</span>:
+            <span class="var">first_pos</span> = <span class="var">line</span>.<span class="fn">lower</span>().<span class="fn">find</span>(<span class="var">keyword</span>)
+        <span class="var">outfile</span>.<span class="fn">write</span>(<span class="var">line</span>.<span class="fn">upper</span>() + <span class="str">"\n"</span>)
+
+<span class="var">infile</span>.<span class="fn">close</span>()
+<span class="var">outfile</span>.<span class="fn">close</span>()
+
+<span class="kw">if</span> <span class="var">count</span> == <span class="num">0</span>:
+    <span class="fn">print</span>(<span class="str">"No matches found."</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">f"Matches: {count}"</span>)
+    <span class="fn">print</span>(<span class="str">f"Total chars in matches: {total_chars}"</span>)
+    <span class="fn">print</span>(<span class="str">f"Keyword first found at index: {first_pos}"</span>)</pre>
+  </div>
+</div>
+
+<!-- CHALLENGE 3 -->
+<div class="challenge ch3">
+  <div class="ch-header">
+    <span class="ch-tag">CHALLENGE 03 · EXTENSION ⭐</span>
+    <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+  </div>
+  <h3>The Full Analyser</h3>
+  <p>Write a complete text analysis program. It should read <code style="font-family:var(--mono)">input.txt</code> and produce a detailed report in <code style="font-family:var(--mono)">output.txt</code> containing: for each line — its length, letter/digit/space counts, first 5 characters, whether it contains a number. At the end — totals for the whole file, the longest line, and a count of lines that are purely alphabetical.</p>
+
+  <ul class="req-list">
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r3a" onchange="updateProgress()"><label for="r3a">Character counting loop using <code>isalpha()</code>, <code>isdigit()</code>, <code>isspace()</code></label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r3b" onchange="updateProgress()"><label for="r3b">Slicing to get first 5 characters: <code>line[0:5]</code></label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r3c" onchange="updateProgress()"><label for="r3c">Tracks the longest line across all iterations</label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r3d" onchange="updateProgress()"><label for="r3d">Counts lines where no digits are found</label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r3e" onchange="updateProgress()"><label for="r3e">Writes a formatted final summary section to output.txt</label></li>
+    <li class="req-item"><input type="checkbox" class="req-cb" id="r3f" onchange="updateProgress()"><label for="r3f">Program runs without errors on a fresh input.txt</label></li>
+  </ul>
+
+  <button class="ms-btn" onclick="toggleMS('ms3')">👁 Show Mark Scheme</button>
+  <div class="ms-box" id="ms3">
+    <pre><span class="cm"># Challenge 3 — Mark Scheme</span>
+<span class="var">infile</span>    = <span class="fn">open</span>(<span class="str">"input.txt"</span>, <span class="str">"r"</span>)
+<span class="var">outfile</span>   = <span class="fn">open</span>(<span class="str">"output.txt"</span>, <span class="str">"w"</span>)
+<span class="var">longest</span>   = <span class="str">""</span>
+<span class="var">alpha_lines</span>= <span class="num">0</span>
+<span class="var">total_letters</span> = <span class="num">0</span>
+<span class="var">total_digits</span>  = <span class="num">0</span>
+<span class="var">line_count</span>    = <span class="num">0</span>
+
+<span class="kw">for</span> <span class="var">line</span> <span class="kw">in</span> <span class="var">infile</span>:
+    <span class="var">line</span>    = <span class="var">line</span>.<span class="fn">strip</span>()
+    <span class="var">letters</span> = <span class="num">0</span>
+    <span class="var">digits</span>  = <span class="num">0</span>
+    <span class="var">spaces</span>  = <span class="num">0</span>
+    <span class="var">line_count</span> += <span class="num">1</span>
+
+    <span class="kw">for</span> <span class="var">ch</span> <span class="kw">in</span> <span class="var">line</span>:
+        <span class="kw">if</span> <span class="var">ch</span>.<span class="fn">isalpha</span>(): <span class="var">letters</span> += <span class="num">1</span>
+        <span class="kw">elif</span> <span class="var">ch</span>.<span class="fn">isdigit</span>(): <span class="var">digits</span> += <span class="num">1</span>
+        <span class="kw">elif</span> <span class="var">ch</span>.<span class="fn">isspace</span>(): <span class="var">spaces</span> += <span class="num">1</span>
+
+    <span class="var">total_letters</span> += <span class="var">letters</span>
+    <span class="var">total_digits</span>  += <span class="var">digits</span>
+    <span class="kw">if</span> <span class="var">digits</span> == <span class="num">0</span>: <span class="var">alpha_lines</span> += <span class="num">1</span>
+    <span class="kw">if</span> <span class="fn">len</span>(<span class="var">line</span>) > <span class="fn">len</span>(<span class="var">longest</span>): <span class="var">longest</span> = <span class="var">line</span>
+
+    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Line {line_count}: {line}\n"</span>)
+    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"  Len:{len(line)} | Letters:{letters} | Digits:{digits} | Spaces:{spaces}\n"</span>)
+    <span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"  First 5: {line[0:5]} | Has digits: {digits > 0}\n\n"</span>)
+
+<span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">"=== SUMMARY ===\n"</span>)
+<span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Total lines    : {line_count}\n"</span>)
+<span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Total letters  : {total_letters}\n"</span>)
+<span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Total digits   : {total_digits}\n"</span>)
+<span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Alpha-only lines: {alpha_lines}\n"</span>)
+<span class="var">outfile</span>.<span class="fn">write</span>(<span class="str">f"Longest line   : {longest}\n"</span>)
+<span class="var">infile</span>.<span class="fn">close</span>()
+<span class="var">outfile</span>.<span class="fn">close</span>()</pre>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- PEER REVIEW -->
+<div class="section-title">🤝 Peer Review Checklist <span class="pill">OPTIONAL</span></div>
+<div class="peer-box">
+  <h3>Rate a classmate's code on each criterion:</h3>
+  <div class="peer-criteria">
+    <div class="peer-row">
+      <span style="flex:1;font-size:0.88rem">Files opened and closed correctly</span>
+      <div class="peer-stars" data-group="pr1">
+        <span class="peer-star" data-v="1">★</span><span class="peer-star" data-v="2">★</span><span class="peer-star" data-v="3">★</span>
+      </div>
+    </div>
+    <div class="peer-row">
+      <span style="flex:1;font-size:0.88rem">String functions used correctly</span>
+      <div class="peer-stars" data-group="pr2">
+        <span class="peer-star" data-v="1">★</span><span class="peer-star" data-v="2">★</span><span class="peer-star" data-v="3">★</span>
+      </div>
+    </div>
+    <div class="peer-row">
+      <span style="flex:1;font-size:0.88rem">Output is clear and formatted well</span>
+      <div class="peer-stars" data-group="pr3">
+        <span class="peer-star" data-v="1">★</span><span class="peer-star" data-v="2">★</span><span class="peer-star" data-v="3">★</span>
+      </div>
+    </div>
+    <div class="peer-row">
+      <span style="flex:1;font-size:0.88rem">No unnecessary code or errors</span>
+      <div class="peer-stars" data-group="pr4">
+        <span class="peer-star" data-v="1">★</span><span class="peer-star" data-v="2">★</span><span class="peer-star" data-v="3">★</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UNIT COMPLETE -->
+<div class="info-box green" style="text-align:center;padding:28px;">
+  <b style="font-size:1.1rem">🎓 You've completed the String Manipulation unit!</b><br><br>
+  You can now: open files, loop through lines, apply <code style="font-family:var(--mono)">upper()</code>, <code style="font-family:var(--mono)">lower()</code>, <code style="font-family:var(--mono)">len()</code>, <code style="font-family:var(--mono)">find()</code>, <code style="font-family:var(--mono)">isalpha()</code>, <code style="font-family:var(--mono)">isdigit()</code>, <code style="font-family:var(--mono)">isspace()</code>, use indexing and slicing, and write results back to files. These skills are all in the Edexcel 1CP2 specification. 🐍
+</div>
+
+<div style="display:flex;justify-content:space-between;padding:20px 0 60px;">
+  <a href="lesson5.html" style="color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:0.8rem;">← Lesson 5</a>
+  <a href="index.html" style="color:var(--accent);text-decoration:none;font-family:var(--mono);font-size:0.8rem;background:rgba(255,159,28,0.1);border:1px solid rgba(255,159,28,0.3);padding:10px 20px;border-radius:8px;">↩ Back to All Lessons</a>
+</div>
+</div>
+
+<script>
+function toggleMS(id){document.getElementById(id).classList.toggle('show');}
+
+function updateProgress(){
+  const grps=[
+    {pfx:'r1',max:6,pid:'p1'},{pfx:'r2',max:6,pid:'p2'},{pfx:'r3',max:6,pid:'p3'}
+  ];
+  let totalDone=0,totalAll=0;
+  grps.forEach(g=>{
+    let done=0;
+    for(let i=97;i<97+g.max;i++){
+      const el=document.getElementById(g.pfx+String.fromCharCode(i));
+      if(el&&el.checked)done++;
+    }
+    totalDone+=done;totalAll+=g.max;
+    document.getElementById(g.pid).style.width=Math.round(done/g.max*100)+'%';
+  });
+  if(totalDone===totalAll){
+    document.getElementById('celebration').classList.add('show');
+    document.getElementById('celebration').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+
+// Peer stars
+document.querySelectorAll('.peer-stars').forEach(group=>{
+  const stars=group.querySelectorAll('.peer-star');
+  stars.forEach(star=>{
+    star.addEventListener('click',()=>{
+      const v=parseInt(star.dataset.v);
+      stars.forEach(s=>s.classList.toggle('lit',parseInt(s.dataset.v)<=v));
+    });
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 3 — Finding & Searching</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0f0e17;--card:#1a1828;--card2:#201e30;--accent:#6bcb77;--accent2:#ff6b6b;--accent3:#ffd93d;--accent4:#4d96ff;--text:#fffffe;--muted:#a7a9be;--border:rgba(255,255,255,0.08);--mono:'Space Mono',monospace;--body:'Nunito',sans-serif;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 70%,rgba(107,203,119,0.07),transparent 50%);pointer-events:none;}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(15,14,23,0.9);backdrop-filter:blur(12px);z-index:100;}
+  .nav-home,.nav-next{color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:0.75rem;transition:color 0.2s;}
+  .nav-home:hover{color:var(--text);}.nav-next:hover{color:var(--accent);}
+  .nav-lesson{font-family:var(--mono);font-size:0.75rem;color:var(--accent);letter-spacing:2px;}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px;}
+  .hero{padding:40px 0 20px;}
+  .lesson-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(107,203,119,0.12);border:1px solid rgba(107,203,119,0.3);color:var(--accent);font-family:var(--mono);font-size:0.72rem;padding:5px 14px;border-radius:20px;margin-bottom:18px;letter-spacing:1px;}
+  h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.15;margin-bottom:12px;}
+  h1 em{color:var(--accent);font-style:normal;}
+  .hero-sub{color:var(--muted);font-size:1rem;line-height:1.7;max-width:600px;}
+  .support-indicator{display:inline-flex;align-items:center;gap:8px;margin-top:18px;background:rgba(255,217,61,0.1);border:1px solid rgba(255,217,61,0.25);border-radius:8px;padding:8px 16px;font-size:0.85rem;color:var(--accent3);}
+  .objectives{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px;margin-bottom:30px;}
+  .objectives h2{font-size:1rem;font-weight:800;margin-bottom:16px;}
+  .obj-list{list-style:none;display:flex;flex-direction:column;gap:10px;}
+  .obj-list li{display:flex;align-items:flex-start;gap:12px;font-size:0.9rem;color:var(--muted);line-height:1.5;}
+  .obj-check{width:20px;height:20px;border-radius:50%;background:rgba(107,203,119,0.15);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:0.65rem;color:var(--accent);}
+  .section-title{font-size:1.1rem;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+  .pill{font-family:var(--mono);font-size:0.65rem;background:rgba(107,203,119,0.15);color:var(--accent);padding:3px 10px;border-radius:20px;letter-spacing:1px;}
+  .info-box{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--accent4);border-radius:12px;padding:18px 22px;margin-bottom:16px;font-size:0.9rem;line-height:1.7;color:var(--muted);}
+  .info-box b{color:var(--text);}.info-box.green{border-left-color:var(--accent);}.info-box.yellow{border-left-color:var(--accent3);}.info-box.red{border-left-color:var(--accent2);}
+  .code-block{background:#0d0b1a;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;}
+  .code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(255,255,255,0.04);border-bottom:1px solid var(--border);}
+  .code-lang{font-family:var(--mono);font-size:0.65rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+  .copy-btn{font-family:var(--mono);font-size:0.65rem;background:rgba(107,203,119,0.15);color:var(--accent);border:1px solid rgba(107,203,119,0.3);padding:4px 12px;border-radius:6px;cursor:pointer;transition:all 0.2s;}
+  .copy-btn:hover{background:rgba(107,203,119,0.25);}
+  pre{padding:20px;font-family:var(--mono);font-size:0.82rem;line-height:1.8;overflow-x:auto;color:#c9d1d9;}
+  .kw{color:#ff79c6;}.fn{color:#50fa7b;}.str{color:#f1fa8c;}.cm{color:#6272a4;font-style:italic;}.num{color:#bd93f9;}.var{color:#8be9fd;}
+  .divider{border:none;border-top:1px solid var(--border);margin:28px 0;}
+  /* FIND DEMO */
+  .find-demo{background:var(--card);border-radius:14px;padding:24px;margin-bottom:20px;}
+  .find-demo h3{font-family:var(--mono);font-size:0.85rem;color:var(--muted);margin-bottom:14px;}
+  .find-controls{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;align-items:flex-end;}
+  .find-controls label{font-size:0.8rem;color:var(--muted);display:flex;flex-direction:column;gap:4px;}
+  .find-controls input{background:rgba(255,255,255,0.07);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:0.85rem;padding:8px 12px;border-radius:6px;width:180px;}
+  .find-controls input:focus{outline:none;border-color:var(--accent);}
+  .find-result{font-family:var(--mono);font-size:0.95rem;padding:14px 18px;border-radius:8px;margin-bottom:8px;}
+  .find-result.found{background:rgba(107,203,119,0.1);border:1px solid rgba(107,203,119,0.3);color:var(--accent);}
+  .find-result.notfound{background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.3);color:var(--accent2);}
+  .vis-highlight{display:flex;gap:3px;flex-wrap:wrap;margin-top:10px;}
+  .vis-ch-base{width:30px;height:30px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.85rem;border:1px solid var(--border);background:var(--card2);color:var(--muted);flex-direction:column;}
+  .vis-ch-base.hl{background:rgba(107,203,119,0.2);border-color:var(--accent);color:var(--accent);}
+  .vis-ch-base span{font-size:0.5rem;color:rgba(255,255,255,0.3);}
+  /* FILL */
+  .fill-area{background:#0d0b1a;border:1px solid var(--border);border-radius:12px;padding:20px;font-family:var(--mono);font-size:0.82rem;line-height:2.2;}
+  .blank-input{display:inline-block;min-width:70px;background:rgba(107,203,119,0.1);border:none;border-bottom:2px solid rgba(107,203,119,0.4);color:var(--accent);font-family:var(--mono);font-size:0.82rem;padding:0 6px;outline:none;text-align:center;transition:border-color 0.2s;}
+  .blank-input.correct{border-bottom-color:var(--accent);color:var(--accent);}
+  .blank-input.wrong{border-bottom-color:var(--accent2);color:var(--accent2);}
+  .check-btn{font-family:var(--mono);font-size:0.75rem;background:rgba(107,203,119,0.15);color:var(--accent);border:1px solid rgba(107,203,119,0.3);padding:8px 20px;border-radius:8px;cursor:pointer;margin-top:14px;transition:all 0.2s;display:block;}
+  /* BUG FIX */
+  .bug-mark{background:rgba(255,107,107,0.2);border-bottom:2px dashed var(--accent2);color:var(--accent2);cursor:pointer;border-radius:3px;padding:1px 3px;}
+  .bug-fixed{background:rgba(107,203,119,0.15);border-bottom:2px solid var(--accent);color:var(--accent);border-radius:3px;padding:1px 3px;}
+  .bug-reveal-btn{font-family:var(--mono);font-size:0.72rem;background:rgba(255,107,107,0.1);color:var(--accent2);border:1px solid rgba(255,107,107,0.3);padding:7px 16px;border-radius:7px;cursor:pointer;transition:all 0.2s;}
+  /* QUIZ */
+  .quiz-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:14px;}
+  .quiz-q{font-weight:700;font-size:0.95rem;margin-bottom:14px;line-height:1.5;}
+  .quiz-q code{font-family:var(--mono);background:rgba(255,255,255,0.07);padding:2px 7px;border-radius:4px;font-size:0.85em;color:var(--accent);}
+  .quiz-options{display:flex;flex-direction:column;gap:8px;}
+  .quiz-opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;border:1px solid var(--border);cursor:pointer;font-size:0.88rem;transition:all 0.2s;background:var(--card2);}
+  .quiz-opt:hover{border-color:rgba(107,203,119,0.4);background:rgba(107,203,119,0.06);}
+  .quiz-opt.correct{border-color:var(--accent);background:rgba(107,203,119,0.1);color:var(--accent);}
+  .quiz-opt.wrong{border-color:var(--accent2);background:rgba(255,107,107,0.1);color:var(--accent2);}
+  .quiz-opt.disabled{pointer-events:none;opacity:0.5;}
+  .quiz-feedback{margin-top:10px;font-size:0.85rem;padding:8px 12px;border-radius:6px;display:none;}
+  .quiz-feedback.show{display:block;}
+  .quiz-feedback.ok{background:rgba(107,203,119,0.1);color:var(--accent);}
+  .quiz-feedback.fail{background:rgba(255,107,107,0.1);color:var(--accent2);}
+  /* WRITE OWN */
+  .write-task{background:var(--card);border:1px solid rgba(107,203,119,0.2);border-radius:14px;padding:24px;margin-bottom:16px;}
+  .write-task h3{font-size:1rem;font-weight:800;margin-bottom:10px;color:var(--accent);}
+  .write-task p{font-size:0.88rem;color:var(--muted);line-height:1.7;margin-bottom:14px;}
+  .hint-btn{font-family:var(--mono);font-size:0.7rem;background:rgba(255,217,61,0.1);color:var(--accent3);border:1px solid rgba(255,217,61,0.3);padding:5px 14px;border-radius:6px;cursor:pointer;transition:all 0.2s;}
+  .hint-box{background:rgba(255,217,61,0.06);border:1px solid rgba(255,217,61,0.2);border-radius:8px;padding:12px 16px;margin-top:12px;font-size:0.85rem;color:var(--muted);display:none;}
+  .hint-box.show{display:block;}
+  ::-webkit-scrollbar{width:6px;height:6px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-home">← All Lessons</a>
+  <span class="nav-lesson">LESSON 03</span>
+  <a href="lesson4.html" class="nav-next">Next →</a>
+</nav>
+
+<div class="wrap">
+<div class="hero">
+  <div class="lesson-badge">🟡 LESSON 03 · SOME SCAFFOLDING</div>
+  <h1>Finding &amp; <em>Searching</em></h1>
+  <p class="hero-sub">Use <code style="font-family:var(--mono);color:var(--accent);">.find()</code> to search inside strings and the <code style="font-family:var(--mono);color:var(--accent);">in</code> operator to check membership. You write more code this lesson!</p>
+  <div class="support-indicator">🟡 Part code provided — fix bugs and write sections yourself</div>
+</div>
+
+<div class="objectives">
+  <h2>🎯 Learning Objectives</h2>
+  <ul class="obj-list">
+    <li><div class="obj-check">✓</div>Use <code style="font-family:var(--mono);font-size:0.8em;color:var(--accent);">.find()</code> to locate a substring and get its position (or -1 if not found)</li>
+    <li><div class="obj-check">✓</div>Use the <code style="font-family:var(--mono);font-size:0.8em;color:var(--accent);">in</code> operator to check if a string contains a substring</li>
+    <li><div class="obj-check">✓</div>Combine <code style="font-family:var(--mono);font-size:0.8em;color:var(--accent);">if</code> statements with string searching</li>
+    <li><div class="obj-check">✓</div>Read a file, search each line, and write selectively to output</li>
+  </ul>
+</div>
+
+<!-- FIND DEMO -->
+<div class="section-title">🔍 .find() Live Explorer <span class="pill">ACTIVITY 1</span></div>
+<p style="color:var(--muted);font-size:0.88rem;margin-bottom:14px;">Type a word to search for inside a string. See exactly how .find() works!</p>
+<div class="find-demo">
+  <h3>sentence = "The cat sat on the mat in Jersey"</h3>
+  <div class="find-controls">
+    <label>Search for:<input type="text" id="find-input" placeholder='e.g. cat' value="cat" oninput="updateFind()"></label>
+  </div>
+  <div class="find-result" id="find-result"></div>
+  <div class="vis-highlight" id="find-vis"></div>
+</div>
+
+<hr class="divider">
+
+<!-- INFO -->
+<div class="info-box green">
+  <b>📌 Key facts about .find():</b><br>
+  • Returns the <b>index position</b> of the first match<br>
+  • Returns <b>-1</b> if the substring is <i>not</i> found<br>
+  • It is <b>case-sensitive</b> — "cat" ≠ "Cat"<br>
+  • Syntax: <code style="font-family:var(--mono);">position = my_string.find("search_word")</code>
+</div>
+
+<!-- FILL THE GAPS -->
+<div class="section-title">✏️ Fill in the Gaps <span class="pill">ACTIVITY 2</span></div>
+<p style="color:var(--muted);font-size:0.88rem;margin-bottom:14px;">Complete the code. This time you have <b>fewer hints</b> — think carefully!</p>
+<div class="fill-area">
+<span class="kw">for</span> <span class="var">line</span> <span class="kw">in</span> <span class="var">input_file</span>:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">line</span> = <span class="var">line</span>.<span class="fn">strip</span>()<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># Check if "Python" appears anywhere in the line</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> <span class="str">"Python"</span> <span class="kw">in</span> <input class="blank-input" id="b1" style="width:70px" data-ans="line">:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">print</span>(<span class="str">"Found Python in:"</span>, <span class="var">line</span>)<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># Use .find() to get the position of "a"</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">pos</span> = <span class="var">line</span>.<input class="blank-input" id="b2" style="width:100px" data-ans='find("a")'><br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># Only print if "a" was found (not -1)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> <span class="var">pos</span> <input class="blank-input" id="b3" style="width:40px" data-ans="!="> <span class="num">-1</span>:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">print</span>(<span class="str">f"Found 'a' at position {<span class="var">pos</span>}"</span>)
+</div>
+<button class="check-btn" onclick="checkFill()">Check Answers</button>
+<div style="margin-top:10px;font-size:0.85rem;color:var(--muted)" id="fill-fb"></div>
+
+<hr class="divider">
+
+<!-- BUG FIX -->
+<div class="section-title">🐛 Fix the Bugs <span class="pill">ACTIVITY 3</span></div>
+<p style="color:var(--muted);font-size:0.88rem;margin-bottom:14px;">This code has <b style="color:var(--accent2)">3 bugs</b>. Click each underlined section to reveal the fix.</p>
+<div style="background:#0d0b1a;border:1px solid rgba(255,107,107,0.2);border-radius:12px;padding:20px;font-family:var(--mono);font-size:0.82rem;line-height:1.8;color:#c9d1d9;margin-bottom:12px;" id="buggy3">
+input_file = open("input.txt", "r")
+output_file = open("output.txt", "w")
+
+for line in input_file:
+    line = line.strip()
+    pos = line.<span class="bug-mark" data-fix='find("Jersey")' data-explain='.find() needs brackets and the search string in quotes!'>find Jersey</span>
+    if pos <span class="bug-mark" data-fix='!= -1' data-explain='Use != to check "not equal to". .find() returns -1 when not found.'><span style="color:var(--accent2)">== -1</span></span>:
+        print("Jersey found at:", pos)
+        output_file.write(<span class="bug-mark" data-fix='line + "\\n"' data-explain='write() needs a string — add \\n at the end for a new line!'>line</span>)
+
+input_file.close()
+output_file.close()
+</div>
+<div style="margin-bottom:12px;font-size:0.82rem;color:var(--muted)" id="bug3-score">Bugs found: 0 / 3</div>
+<button class="bug-reveal-btn" onclick="revealAllBugs()">Show all fixes</button>
+
+<hr class="divider">
+
+<!-- WRITE OWN CODE -->
+<div class="section-title">🖊️ Write Your Own Code <span class="pill">ACTIVITY 4</span></div>
+<div class="write-task">
+  <h3>Task: Search and Filter</h3>
+  <p>Write a Python program that reads <code style="font-family:var(--mono)">input.txt</code> and writes only the lines that contain the word <code style="font-family:var(--mono)">"island"</code> (case-insensitive — hint: convert to lower first!) to <code style="font-family:var(--mono)">output.txt</code>. Print how many matching lines were found.</p>
+  <button class="hint-btn" onclick="toggleHint('h1')">💡 Show Hint 1</button>
+  <div class="hint-box" id="h1">Convert to lowercase first: <code style="font-family:var(--mono)">line.lower()</code> then use <code style="font-family:var(--mono)">if "island" in line_lower:</code></div>
+  <button class="hint-btn" style="margin-top:8px" onclick="toggleHint('h2')">💡 Show Hint 2</button>
+  <div class="hint-box" id="h2">Use a counter variable: <code style="font-family:var(--mono)">count = 0</code> before the loop, then <code style="font-family:var(--mono)">count += 1</code> each time you find a match.</div>
+</div>
+
+<!-- QUIZ -->
+<div class="section-title">🧠 Quick Quiz <span class="pill">ACTIVITY 5</span></div>
+<div class="quiz-card">
+  <div class="quiz-q">What does <code>s = "hello"; s.find("ll")</code> return?</div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'q1',false)">1</div>
+    <div class="quiz-opt" onclick="answer(this,'q1',true)">2</div>
+    <div class="quiz-opt" onclick="answer(this,'q1',false)">True</div>
+    <div class="quiz-opt" onclick="answer(this,'q1',false)">-1</div>
+  </div>
+  <div class="quiz-feedback" id="fb-q1"></div>
+</div>
+<div class="quiz-card">
+  <div class="quiz-q">What does <code>"cat".find("dog")</code> return?</div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'q2',false)">False</div>
+    <div class="quiz-opt" onclick="answer(this,'q2',false)">0</div>
+    <div class="quiz-opt" onclick="answer(this,'q2',true)">-1</div>
+    <div class="quiz-opt" onclick="answer(this,'q2',false)">None</div>
+  </div>
+  <div class="quiz-feedback" id="fb-q2"></div>
+</div>
+<div class="quiz-card">
+  <div class="quiz-q">Which expression checks if "Python" appears in <code>line</code>?</div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'q3',false)">line.find() == "Python"</div>
+    <div class="quiz-opt" onclick="answer(this,'q3',true)">"Python" in line</div>
+    <div class="quiz-opt" onclick="answer(this,'q3',false)">line.contains("Python")</div>
+    <div class="quiz-opt" onclick="answer(this,'q3',false)">line == "Python"</div>
+  </div>
+  <div class="quiz-feedback" id="fb-q3"></div>
+</div>
+<div class="quiz-card">
+  <div class="quiz-q">Is <code>.find()</code> case-sensitive? What does <code>"Hello".find("hello")</code> return?</div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'q4',false)">0 — it ignores case</div>
+    <div class="quiz-opt" onclick="answer(this,'q4',true)">-1 — it IS case-sensitive</div>
+    <div class="quiz-opt" onclick="answer(this,'q4',false)">True</div>
+    <div class="quiz-opt" onclick="answer(this,'q4',false)">5</div>
+  </div>
+  <div class="quiz-feedback" id="fb-q4"></div>
+</div>
+
+<div style="display:flex;justify-content:space-between;padding:20px 0 60px;">
+  <a href="lesson2.html" style="color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:0.8rem;">← Lesson 2</a>
+  <a href="lesson4.html" style="color:var(--accent);text-decoration:none;font-family:var(--mono);font-size:0.8rem;background:rgba(107,203,119,0.1);border:1px solid rgba(107,203,119,0.3);padding:10px 20px;border-radius:8px;">Lesson 4: Checking Characters →</a>
+</div>
+</div>
+
+<script>
+const sentence="The cat sat on the mat in Jersey";
+function updateFind(){
+  const q=document.getElementById('find-input').value;
+  const pos=sentence.indexOf(q);
+  const resEl=document.getElementById('find-result');
+  const visEl=document.getElementById('find-vis');
+  if(!q){resEl.textContent='Type something to search!';resEl.className='find-result';visEl.innerHTML='';return;}
+  if(pos===-1){
+    resEl.textContent=`.find("${q}") → -1  (not found)`;
+    resEl.className='find-result notfound';
+  } else {
+    resEl.textContent=`.find("${q}") → ${pos}  ✓ Found at index ${pos}`;
+    resEl.className='find-result found';
+  }
+  visEl.innerHTML='';
+  sentence.split('').forEach((ch,i)=>{
+    const div=document.createElement('div');
+    div.className='vis-ch-base';
+    const inRange=pos!==-1&&i>=pos&&i<pos+q.length;
+    if(inRange)div.classList.add('hl');
+    div.innerHTML=`${ch==' '?'␣':ch}<span>${i}</span>`;
+    visEl.appendChild(div);
+  });
+}
+updateFind();
+
+// Fill blanks
+function checkFill(){
+  const blanks=[
+    {id:'b1',ans:'line'},
+    {id:'b2',ans:'find("a")',alt:["find('a')"]},
+    {id:'b3',ans:'!='}
+  ];
+  let correct=0;
+  blanks.forEach(b=>{
+    const el=document.getElementById(b.id);
+    const val=el.value.trim().replace(/\s/g,'');
+    const allAns=[b.ans,...(b.alt||[])].map(a=>a.replace(/\s/g,''));
+    if(allAns.includes(val)){el.classList.add('correct');el.classList.remove('wrong');correct++;}
+    else{el.classList.add('wrong');el.classList.remove('correct');}
+  });
+  document.getElementById('fill-fb').textContent=correct===3?'✅ All correct!':correct+'/3 correct — check the highlighted boxes.';
+}
+
+// Bugs
+let bugsFound=0;
+document.querySelectorAll('.bug-mark').forEach(el=>{
+  el.addEventListener('click',()=>{
+    if(el.classList.contains('bug-fixed'))return;
+    el.classList.remove('bug-mark');el.classList.add('bug-fixed');
+    el.textContent=el.dataset.fix;bugsFound++;
+    document.getElementById('bug3-score').textContent=`Bugs found: ${bugsFound} / 3`;
+  });
+});
+function revealAllBugs(){document.querySelectorAll('.bug-mark').forEach(el=>{el.classList.remove('bug-mark');el.classList.add('bug-fixed');el.textContent=el.dataset.fix;bugsFound++;});document.getElementById('bug3-score').textContent='Bugs found: 3 / 3';}
+
+// Hints
+function toggleHint(id){const h=document.getElementById(id);h.classList.toggle('show');}
+
+// Quiz
+const answered={};
+function answer(el,qid,correct){
+  if(answered[qid])return;answered[qid]=true;
+  el.parentElement.querySelectorAll('.quiz-opt').forEach(o=>o.classList.add('disabled'));
+  el.classList.add(correct?'correct':'wrong');
+  const fb=document.getElementById('fb-'+qid);
+  fb.classList.add('show',correct?'ok':'fail');
+  const msgs={
+    q1:{ok:'✅ "ll" starts at index 2 (h=0, e=1, l=2).',fail:'❌ Count: h=0, e=1, l=2 — so "ll" starts at index 2.'},
+    q2:{ok:'✅ Correct! -1 means "not found".',fail:'❌ When the substring is not found, .find() returns -1.'},
+    q3:{ok:'✅ The "in" operator is the most readable way to check membership.',fail:'❌ Use the "in" operator: "Python" in line'},
+    q4:{ok:'✅ Correct! .find() IS case-sensitive. "Hello" ≠ "hello".',fail:'❌ .find() is case-sensitive. "Hello" and "hello" are different strings.'}
+  };
+  fb.textContent=msgs[qid][correct?'ok':'fail'];
+}
+</script>
+</body>
+</html>

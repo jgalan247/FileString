@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>String Manipulation — GCSE CS Python</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e17;
+    --card: #1a1828;
+    --accent1: #ff6b6b;
+    --accent2: #ffd93d;
+    --accent3: #6bcb77;
+    --accent4: #4d96ff;
+    --accent5: #c77dff;
+    --accent6: #ff9f1c;
+    --text: #fffffe;
+    --muted: #a7a9be;
+    --mono: 'Space Mono', monospace;
+    --body: 'Nunito', sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background: var(--bg); color: var(--text); font-family: var(--body); min-height:100vh; overflow-x:hidden; }
+
+  /* Animated background */
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background: radial-gradient(ellipse at 20% 20%, rgba(77,150,255,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(199,125,255,0.08) 0%, transparent 50%);
+    pointer-events:none; z-index:0;
+  }
+
+  header { text-align:center; padding: 60px 20px 40px; position:relative; z-index:1; }
+  .badge { display:inline-block; background: var(--accent4); color:#fff; font-family:var(--mono); font-size:0.7rem; padding:4px 12px; border-radius:20px; margin-bottom:16px; letter-spacing:2px; text-transform:uppercase; }
+  h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight:900; line-height:1.1; margin-bottom:12px; }
+  h1 span { color: var(--accent2); }
+  .subtitle { color: var(--muted); font-size:1.1rem; max-width:500px; margin:0 auto 10px; }
+  .topic-tags { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:18px; }
+  .tag { background: rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:4px 12px; font-family:var(--mono); font-size:0.72rem; color:var(--muted); }
+
+  /* Scaffold bar */
+  .scaffold-bar { max-width:900px; margin:0 auto 40px; padding:0 20px; }
+  .scaffold-label { font-family:var(--mono); font-size:0.7rem; color:var(--muted); margin-bottom:8px; letter-spacing:1px; text-transform:uppercase; display:flex; justify-content:space-between; }
+  .scaffold-track { height:6px; background:rgba(255,255,255,0.08); border-radius:10px; overflow:hidden; }
+  .scaffold-fill { height:100%; width:100%; background: linear-gradient(90deg, var(--accent3) 0%, var(--accent2) 40%, var(--accent1) 100%); border-radius:10px; position:relative; }
+  .scaffold-fill::after { content:''; position:absolute; right:0; top:0; bottom:0; width:40%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2)); }
+
+  /* Lesson grid */
+  .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:20px; max-width:1100px; margin:0 auto; padding:0 20px 80px; position:relative; z-index:1; }
+
+  .lesson-card { background: var(--card); border-radius:16px; padding:28px 24px; position:relative; overflow:hidden; cursor:pointer; text-decoration:none; display:block; transition: transform 0.25s, box-shadow 0.25s; border: 1px solid rgba(255,255,255,0.06); }
+  .lesson-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+  .lesson-card::before { content:''; position:absolute; inset:0; opacity:0; transition:opacity 0.3s; }
+  .lesson-card:hover::before { opacity:1; }
+
+  .l1::before { background: radial-gradient(ellipse at top left, rgba(255,107,107,0.12), transparent 70%); }
+  .l2::before { background: radial-gradient(ellipse at top left, rgba(255,217,61,0.12), transparent 70%); }
+  .l3::before { background: radial-gradient(ellipse at top left, rgba(107,203,119,0.12), transparent 70%); }
+  .l4::before { background: radial-gradient(ellipse at top left, rgba(77,150,255,0.12), transparent 70%); }
+  .l5::before { background: radial-gradient(ellipse at top left, rgba(199,125,255,0.12), transparent 70%); }
+  .l6::before { background: radial-gradient(ellipse at top left, rgba(255,159,28,0.12), transparent 70%); }
+
+  .lesson-num { font-family:var(--mono); font-size:0.7rem; color: var(--muted); margin-bottom:10px; letter-spacing:2px; }
+  .lesson-icon { font-size:2.4rem; margin-bottom:14px; }
+  .lesson-card h2 { font-size:1.15rem; font-weight:800; margin-bottom:8px; }
+  .lesson-card p { font-size:0.875rem; color:var(--muted); line-height:1.6; margin-bottom:16px; }
+
+  .functions { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:18px; }
+  .fn { font-family:var(--mono); font-size:0.65rem; padding:3px 8px; border-radius:4px; font-weight:700; }
+
+  .support-pill { display:inline-flex; align-items:center; gap:6px; font-size:0.75rem; font-weight:700; padding:5px 12px; border-radius:20px; }
+
+  .arrow { position:absolute; bottom:24px; right:24px; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.9rem; transition: transform 0.2s; }
+  .lesson-card:hover .arrow { transform: translate(3px, -3px); }
+
+  /* Colors per lesson */
+  .l1 .fn { background: rgba(255,107,107,0.15); color: var(--accent1); }
+  .l2 .fn { background: rgba(255,217,61,0.15); color: var(--accent2); }
+  .l3 .fn { background: rgba(107,203,119,0.15); color: var(--accent3); }
+  .l4 .fn { background: rgba(77,150,255,0.15); color: var(--accent4); }
+  .l5 .fn { background: rgba(199,125,255,0.15); color: var(--accent5); }
+  .l6 .fn { background: rgba(255,159,28,0.15); color: var(--accent6); }
+
+  .l1 .lesson-card h2, .l1 h2 { color: var(--accent1); }
+  .l2 h2 { color: var(--accent2); }
+  .l3 h2 { color: var(--accent3); }
+  .l4 h2 { color: var(--accent4); }
+  .l5 h2 { color: var(--accent5); }
+  .l6 h2 { color: var(--accent6); }
+
+  .l1 .support-pill { background: rgba(107,203,119,0.15); color: var(--accent3); }
+  .l2 .support-pill { background: rgba(107,203,119,0.15); color: var(--accent3); }
+  .l3 .support-pill { background: rgba(255,217,61,0.15); color: var(--accent2); }
+  .l4 .support-pill { background: rgba(255,217,61,0.15); color: var(--accent2); }
+  .l5 .support-pill { background: rgba(255,107,107,0.15); color: var(--accent1); }
+  .l6 .support-pill { background: rgba(255,107,107,0.15); color: var(--accent1); }
+
+  .l1 .arrow { background: rgba(255,107,107,0.2); color: var(--accent1); }
+  .l2 .arrow { background: rgba(255,217,61,0.2); color: var(--accent2); }
+  .l3 .arrow { background: rgba(107,203,119,0.2); color: var(--accent3); }
+  .l4 .arrow { background: rgba(77,150,255,0.2); color: var(--accent4); }
+  .l5 .arrow { background: rgba(199,125,255,0.2); color: var(--accent5); }
+  .l6 .arrow { background: rgba(255,159,28,0.2); color: var(--accent6); }
+
+  footer { text-align:center; padding:30px; color:var(--muted); font-size:0.8rem; font-family:var(--mono); border-top:1px solid rgba(255,255,255,0.06); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Edexcel GCSE CS · 1CP2</div>
+  <h1>String <span>Manipulation</span><br>in Python</h1>
+  <p class="subtitle">6 lessons combining file handling & string functions — from guided to independent</p>
+  <div class="topic-tags">
+    <span class="tag">upper() / lower()</span>
+    <span class="tag">len()</span>
+    <span class="tag">find()</span>
+    <span class="tag">isalpha()</span>
+    <span class="tag">isdigit()</span>
+    <span class="tag">isspace()</span>
+    <span class="tag">indexing</span>
+    <span class="tag">slicing</span>
+    <span class="tag">File I/O</span>
+  </div>
+</header>
+
+<div class="scaffold-bar">
+  <div class="scaffold-label">
+    <span>🟢 Full support</span>
+    <span>Support fades as you progress →</span>
+    <span>🔴 Independent</span>
+  </div>
+  <div class="scaffold-track"><div class="scaffold-fill"></div></div>
+</div>
+
+<div class="grid">
+
+  <a href="lesson1.html" class="lesson-card l1">
+    <div class="lesson-num">LESSON 01</div>
+    <div class="lesson-icon">📂</div>
+    <h2>File Recap & First Strings</h2>
+    <p>Refresh file reading & writing. Meet strings — copy & run complete code in IDLE.</p>
+    <div class="functions">
+      <span class="fn">open()</span><span class="fn">read()</span><span class="fn">write()</span><span class="fn">upper()</span><span class="fn">lower()</span>
+    </div>
+    <span class="support-pill">🟢 Full scaffold</span>
+    <div class="arrow">→</div>
+  </a>
+
+  <a href="lesson2.html" class="lesson-card l2">
+    <div class="lesson-num">LESSON 02</div>
+    <div class="lesson-icon">📏</div>
+    <h2>Length & Indexing</h2>
+    <p>Measure strings and pick out characters by position. Fill in the missing parts.</p>
+    <div class="functions">
+      <span class="fn">len()</span><span class="fn">indexing [ ]</span><span class="fn">slicing [ : ]</span>
+    </div>
+    <span class="support-pill">🟢 Mostly guided</span>
+    <div class="arrow">→</div>
+  </a>
+
+  <a href="lesson3.html" class="lesson-card l3">
+    <div class="lesson-num">LESSON 03</div>
+    <div class="lesson-icon">🔍</div>
+    <h2>Finding & Searching</h2>
+    <p>Search inside strings. Fix the buggy code and complete the gaps yourself.</p>
+    <div class="functions">
+      <span class="fn">find()</span><span class="fn">in</span><span class="fn">selection</span>
+    </div>
+    <span class="support-pill">🟡 Some scaffolding</span>
+    <div class="arrow">→</div>
+  </a>
+
+  <a href="lesson4.html" class="lesson-card l4">
+    <div class="lesson-num">LESSON 04</div>
+    <div class="lesson-icon">🔎</div>
+    <h2>Checking Characters</h2>
+    <p>Inspect strings character-by-character. Spot the errors and write sections from hints.</p>
+    <div class="functions">
+      <span class="fn">isalpha()</span><span class="fn">isdigit()</span><span class="fn">isspace()</span>
+    </div>
+    <span class="support-pill">🟡 Less scaffolding</span>
+    <div class="arrow">→</div>
+  </a>
+
+  <a href="lesson5.html" class="lesson-card l5">
+    <div class="lesson-num">LESSON 05</div>
+    <div class="lesson-icon">⚙️</div>
+    <h2>Combining It All</h2>
+    <p>Read, process, and write. You write most of the code — only light hints provided.</p>
+    <div class="functions">
+      <span class="fn">All functions</span><span class="fn">for loop</span><span class="fn">if/elif</span>
+    </div>
+    <span class="support-pill">🔴 Mostly independent</span>
+    <div class="arrow">→</div>
+  </a>
+
+  <a href="lesson6.html" class="lesson-card l6">
+    <div class="lesson-num">LESSON 06</div>
+    <div class="lesson-icon">🏆</div>
+    <h2>Final Challenge</h2>
+    <p>No code provided. You design, write and test the full program from scratch.</p>
+    <div class="functions">
+      <span class="fn">All topics</span><span class="fn">Independent</span>
+    </div>
+    <span class="support-pill">🔴 Full independence</span>
+    <div class="arrow">→</div>
+  </a>
+
+</div>
+
+<footer>GCSE Computer Science · Edexcel 1CP2 · String Manipulation Unit · Made with Python 3</footer>
+
+</body>
+</html>

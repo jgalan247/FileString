@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 1 — File Recap & First Strings</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0f0e17; --card:#1a1828; --card2:#201e30;
+    --accent:#ff6b6b; --accent2:#ffd93d; --accent3:#6bcb77;
+    --text:#fffffe; --muted:#a7a9be; --border:rgba(255,255,255,0.08);
+    --mono:'Space Mono',monospace; --body:'Nunito',sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 15% 30%,rgba(255,107,107,0.07),transparent 50%);pointer-events:none;}
+
+  /* NAV */
+  nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(15,14,23,0.9);backdrop-filter:blur(12px);z-index:100;}
+  .nav-home{color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:0.75rem;display:flex;align-items:center;gap:6px;transition:color 0.2s;}
+  .nav-home:hover{color:var(--text);}
+  .nav-lesson{font-family:var(--mono);font-size:0.75rem;color:var(--accent);letter-spacing:2px;}
+  .nav-next{color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:0.75rem;display:flex;align-items:center;gap:6px;transition:color 0.2s;}
+  .nav-next:hover{color:var(--accent);}
+
+  /* HERO */
+  .hero{padding:50px 24px 30px;max-width:860px;margin:0 auto;}
+  .lesson-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,107,107,0.12);border:1px solid rgba(255,107,107,0.3);color:var(--accent);font-family:var(--mono);font-size:0.72rem;padding:5px 14px;border-radius:20px;margin-bottom:18px;letter-spacing:1px;}
+  h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.15;margin-bottom:12px;}
+  h1 em{color:var(--accent);font-style:normal;}
+  .hero-sub{color:var(--muted);font-size:1rem;line-height:1.7;max-width:600px;}
+  .support-indicator{display:inline-flex;align-items:center;gap:8px;margin-top:18px;background:rgba(107,203,119,0.1);border:1px solid rgba(107,203,119,0.25);border-radius:8px;padding:8px 16px;font-size:0.85rem;color:var(--accent3);}
+
+  /* OBJECTIVES */
+  .objectives{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px;margin:30px auto;max-width:860px;}
+  .objectives h2{font-size:1rem;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+  .obj-list{list-style:none;display:flex;flex-direction:column;gap:10px;}
+  .obj-list li{display:flex;align-items:flex-start;gap:12px;font-size:0.9rem;color:var(--muted);line-height:1.5;}
+  .obj-check{width:20px;height:20px;border-radius:50%;background:rgba(107,203,119,0.15);border:1px solid var(--accent3);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:0.65rem;color:var(--accent3);}
+
+  /* SECTION */
+  .section{max-width:860px;margin:0 auto 30px;padding:0 24px;}
+  .section-title{font-size:1.15rem;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+  .section-title .pill{font-family:var(--mono);font-size:0.65rem;background:rgba(255,107,107,0.15);color:var(--accent);padding:3px 10px;border-radius:20px;letter-spacing:1px;}
+
+  /* INFO BOX */
+  .info-box{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--accent4,#4d96ff);border-radius:12px;padding:18px 22px;margin-bottom:16px;font-size:0.9rem;line-height:1.7;color:var(--muted);}
+  .info-box b{color:var(--text);}
+  .info-box.green{border-left-color:var(--accent3);}
+  .info-box.yellow{border-left-color:var(--accent2);}
+  .info-box.red{border-left-color:var(--accent);}
+  --accent4:#4d96ff;
+
+  /* CODE BLOCK */
+  .code-block{background:#0d0b1a;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;}
+  .code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(255,255,255,0.04);border-bottom:1px solid var(--border);}
+  .code-lang{font-family:var(--mono);font-size:0.65rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+  .copy-btn{font-family:var(--mono);font-size:0.65rem;background:rgba(107,203,119,0.15);color:var(--accent3);border:1px solid rgba(107,203,119,0.3);padding:4px 12px;border-radius:6px;cursor:pointer;transition:all 0.2s;}
+  .copy-btn:hover{background:rgba(107,203,119,0.25);}
+  .copy-btn.copied{background:rgba(107,203,119,0.3);color:#fff;}
+  pre{padding:20px;font-family:var(--mono);font-size:0.82rem;line-height:1.8;overflow-x:auto;color:#c9d1d9;}
+  .kw{color:#ff79c6;} .fn{color:#50fa7b;} .str{color:#f1fa8c;} .cm{color:#6272a4;font-style:italic;} .num{color:#bd93f9;} .var{color:#8be9fd;}
+
+  /* INSTRUCTIONS */
+  .step-list{list-style:none;display:flex;flex-direction:column;gap:10px;}
+  .step-list li{display:flex;align-items:flex-start;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-size:0.9rem;line-height:1.6;}
+  .step-num{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-family:var(--mono);font-size:0.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+  /* QUIZ */
+  .quiz-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:14px;}
+  .quiz-q{font-weight:700;font-size:0.95rem;margin-bottom:14px;line-height:1.5;}
+  .quiz-q code{font-family:var(--mono);background:rgba(255,255,255,0.07);padding:2px 7px;border-radius:4px;font-size:0.85em;color:var(--accent2);}
+  .quiz-options{display:flex;flex-direction:column;gap:8px;}
+  .quiz-opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;border:1px solid var(--border);cursor:pointer;font-size:0.88rem;transition:all 0.2s;background:var(--card2);}
+  .quiz-opt:hover{border-color:rgba(255,107,107,0.4);background:rgba(255,107,107,0.06);}
+  .quiz-opt.correct{border-color:var(--accent3);background:rgba(107,203,119,0.1);color:var(--accent3);}
+  .quiz-opt.wrong{border-color:var(--accent);background:rgba(255,107,107,0.1);color:var(--accent);}
+  .quiz-opt.disabled{pointer-events:none;opacity:0.5;}
+  .quiz-feedback{margin-top:10px;font-size:0.85rem;padding:8px 12px;border-radius:6px;display:none;}
+  .quiz-feedback.show{display:block;}
+  .quiz-feedback.ok{background:rgba(107,203,119,0.1);color:var(--accent3);}
+  .quiz-feedback.fail{background:rgba(255,107,107,0.1);color:var(--accent);}
+
+  /* MATCH GAME */
+  .match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+  .match-col{display:flex;flex-direction:column;gap:8px;}
+  .match-item{padding:10px 14px;border-radius:8px;border:1px solid var(--border);cursor:pointer;font-size:0.85rem;background:var(--card2);transition:all 0.2s;font-family:var(--mono);}
+  .match-item.term{color:var(--accent2);}
+  .match-item.def{color:var(--muted);font-family:var(--body);font-size:0.82rem;}
+  .match-item.selected{border-color:var(--accent);background:rgba(255,107,107,0.1);}
+  .match-item.matched{border-color:var(--accent3);background:rgba(107,203,119,0.1);color:var(--accent3);pointer-events:none;opacity:0.7;}
+  .match-item.wrong-flash{border-color:var(--accent);background:rgba(255,107,107,0.15);animation:shake 0.3s;}
+  @keyframes shake{0%,100%{transform:translateX(0)}33%{transform:translateX(-4px)}66%{transform:translateX(4px)}}
+  .match-score{font-family:var(--mono);font-size:0.8rem;color:var(--muted);margin-bottom:12px;}
+
+  /* FILL BLANK */
+  .fill-area{background:#0d0b1a;border:1px solid var(--border);border-radius:12px;padding:20px;font-family:var(--mono);font-size:0.82rem;line-height:2;}
+  .blank-input{display:inline-block;min-width:80px;background:rgba(77,150,255,0.1);border:none;border-bottom:2px solid rgba(77,150,255,0.5);color:var(--accent4,#4d96ff);font-family:var(--mono);font-size:0.82rem;padding:0 6px;outline:none;text-align:center;transition:border-color 0.2s;}
+  .blank-input:focus{border-bottom-color:#4d96ff;}
+  .blank-input.correct{border-bottom-color:var(--accent3);color:var(--accent3);}
+  .blank-input.wrong{border-bottom-color:var(--accent);color:var(--accent);}
+  .check-btn{font-family:var(--mono);font-size:0.75rem;background:rgba(255,107,107,0.15);color:var(--accent);border:1px solid rgba(255,107,107,0.3);padding:8px 20px;border-radius:8px;cursor:pointer;margin-top:14px;transition:all 0.2s;display:block;}
+  .check-btn:hover{background:rgba(255,107,107,0.25);}
+  .fill-feedback{margin-top:10px;font-size:0.85rem;color:var(--muted);}
+
+  /* MEMORY GAME */
+  .memory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px;}
+  .mem-card{aspect-ratio:1;border-radius:10px;border:1px solid var(--border);background:var(--card2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-family:var(--mono);text-align:center;padding:6px;transition:all 0.25s;color:transparent;position:relative;overflow:hidden;}
+  .mem-card::before{content:attr(data-front);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:6px;color:var(--muted);font-size:0.6rem;opacity:0;transition:opacity 0.2s;}
+  .mem-card.flipped{background:rgba(77,150,255,0.1);border-color:rgba(77,150,255,0.4);}
+  .mem-card.flipped::before{opacity:1;}
+  .mem-card.flipped::after{content:'?';opacity:0;}
+  .mem-card:not(.flipped)::after{content:'?';position:absolute;font-size:1.2rem;color:var(--muted);opacity:0.4;}
+  .mem-card.matched-m{background:rgba(107,203,119,0.1);border-color:rgba(107,203,119,0.4);pointer-events:none;}
+  .mem-card.matched-m::before{color:var(--accent3);}
+  .mem-stats{font-family:var(--mono);font-size:0.78rem;color:var(--muted);margin-bottom:10px;display:flex;gap:20px;}
+  .reset-btn{font-family:var(--mono);font-size:0.72rem;background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--border);padding:6px 16px;border-radius:6px;cursor:pointer;transition:all 0.2s;}
+  .reset-btn:hover{background:rgba(255,255,255,0.1);color:var(--text);}
+
+  /* PROGRESS */
+  .progress-bar-wrap{max-width:860px;margin:0 auto 30px;padding:0 24px;}
+  .progress-label{font-family:var(--mono);font-size:0.7rem;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;}
+  .progress-track{height:4px;background:rgba(255,255,255,0.06);border-radius:10px;}
+  .progress-fill{height:100%;background:var(--accent);border-radius:10px;transition:width 0.5s;}
+  .progress-dots{display:flex;gap:6px;margin-top:16px;justify-content:center;flex-wrap:wrap;}
+  .p-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.1);transition:background 0.3s;}
+  .p-dot.done{background:var(--accent3);}
+  .p-dot.active{background:var(--accent);}
+
+  /* divider */
+  .divider{border:none;border-top:1px solid var(--border);margin:30px 0;}
+
+  /* scrollbar */
+  ::-webkit-scrollbar{width:6px;height:6px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-home">← All Lessons</a>
+  <span class="nav-lesson">LESSON 01</span>
+  <a href="lesson2.html" class="nav-next">Next →</a>
+</nav>
+
+<!-- HERO -->
+<div style="max-width:860px;margin:0 auto;padding:0 24px;">
+<div class="hero" style="padding:40px 0 20px;">
+  <div class="lesson-badge">🟢 LESSON 01 · FULL SCAFFOLD</div>
+  <h1>File Recap &amp; <em>First Strings</em></h1>
+  <p class="hero-sub">We revisit opening, reading, and writing files — then meet our first string functions: <code style="font-family:var(--mono);color:var(--accent2);">upper()</code> and <code style="font-family:var(--mono);color:var(--accent2);">lower()</code>. All code is provided — copy it, run it, and experiment!</p>
+  <div class="support-indicator">🟢 Full code provided — just copy, run, and explore in IDLE</div>
+</div>
+</div>
+
+<!-- OBJECTIVES -->
+<div style="max-width:860px;margin:0 auto;padding:0 24px;">
+<div class="objectives">
+  <h2>🎯 Learning Objectives</h2>
+  <ul class="obj-list">
+    <li><div class="obj-check">✓</div>Open and read a text file line by line using a <code style="font-family:var(--mono);font-size:0.8em;color:var(--accent2);">for</code> loop</li>
+    <li><div class="obj-check">✓</div>Write processed content to an output file</li>
+    <li><div class="obj-check">✓</div>Use <code style="font-family:var(--mono);font-size:0.8em;color:var(--accent2);">.upper()</code> to convert a string to ALL CAPITALS</li>
+    <li><div class="obj-check">✓</div>Use <code style="font-family:var(--mono);font-size:0.8em;color:var(--accent2);">.lower()</code> to convert a string to all lowercase</li>
+    <li><div class="obj-check">✓</div>Understand that strings are immutable — you must store the result</li>
+  </ul>
+</div>
+</div>
+
+<div style="max-width:860px;margin:0 auto 24px;padding:0 24px;">
+  <div class="progress-dots">
+    <div class="p-dot done" title="Match"></div>
+    <div class="p-dot active" title="Code"></div>
+    <div class="p-dot" title="Fill"></div>
+    <div class="p-dot" title="Quiz"></div>
+    <div class="p-dot" title="Memory"></div>
+  </div>
+</div>
+
+<!-- SECTION 1: MATCH -->
+<div class="section">
+  <div class="section-title">🃏 Match the Terms <span class="pill">ACTIVITY 1</span></div>
+  <p style="color:var(--muted);font-size:0.88rem;margin-bottom:16px;">Click a term on the left, then click its matching definition on the right.</p>
+
+  <div class="match-score" id="match-score">Matched: 0 / 5</div>
+  <div class="match-grid">
+    <div class="match-col" id="terms-col">
+      <div class="match-item term" data-pair="1">open()</div>
+      <div class="match-item term" data-pair="2">.upper()</div>
+      <div class="match-item term" data-pair="3">.lower()</div>
+      <div class="match-item term" data-pair="4">for loop</div>
+      <div class="match-item term" data-pair="5">.write()</div>
+    </div>
+    <div class="match-col" id="defs-col">
+      <div class="match-item def" data-pair="3">Returns a copy of the string in all lowercase letters</div>
+      <div class="match-item def" data-pair="1">Opens a file and returns a file object to work with</div>
+      <div class="match-item def" data-pair="5">Sends text to an open file</div>
+      <div class="match-item def" data-pair="4">Repeats a block of code for each item in a sequence</div>
+      <div class="match-item def" data-pair="2">Returns a copy of the string in ALL CAPITAL letters</div>
+    </div>
+  </div>
+  <button class="reset-btn" onclick="resetMatch()">↺ Reset</button>
+</div>
+
+<!-- SECTION 2: STARTER CODE -->
+<div class="section">
+  <hr class="divider">
+  <div class="section-title">💻 Your First Program <span class="pill">ACTIVITY 2</span></div>
+
+  <div class="info-box green">
+    <b>📁 Before you start:</b> Open Notepad and create a file called <code style="font-family:var(--mono);">input.txt</code>. Save it in the same folder where you will save your Python file. Add 5–6 lines of mixed-case text, for example:<br><br>
+    <code style="font-family:var(--mono);">My Name Is Alex<br>i love coding in python<br>GCSE Computer Science Is Fun<br>hello World</code>
+  </div>
+
+  <div class="info-box" style="border-left-color:#4d96ff;">
+    <b>📋 Instructions:</b> Copy the code below into IDLE (File → New File), save it as <code style="font-family:var(--mono);">lesson1.py</code> in the <b>same folder</b> as your input.txt. Run it with F5. Check the output.txt file that is created!
+  </div>
+
+  <div class="code-block">
+    <div class="code-header">
+      <span class="code-lang">Python — lesson1.py</span>
+      <button class="copy-btn" onclick="copyCode(this,'code1')">Copy</button>
+    </div>
+    <pre id="code1"><span class="cm"># ============================================
+# Lesson 1 — File Recap & String Case
+# ============================================</span>
+
+<span class="cm"># --- STEP 1: Open the input file for reading ---</span>
+<span class="var">input_file</span> = <span class="fn">open</span>(<span class="str">"input.txt"</span>, <span class="str">"r"</span>)
+
+<span class="cm"># --- STEP 2: Open the output file for writing ---</span>
+<span class="var">output_file</span> = <span class="fn">open</span>(<span class="str">"output.txt"</span>, <span class="str">"w"</span>)
+
+<span class="cm"># --- STEP 3: Loop through every line in the input file ---</span>
+<span class="kw">for</span> <span class="var">line</span> <span class="kw">in</span> <span class="var">input_file</span>:
+
+    <span class="cm"># Remove the newline character from the end of each line</span>
+    <span class="var">line</span> = <span class="var">line</span>.<span class="fn">strip</span>()
+
+    <span class="cm"># Convert the line to UPPER CASE</span>
+    <span class="var">upper_line</span> = <span class="var">line</span>.<span class="fn">upper</span>()
+
+    <span class="cm"># Convert the line to lower case</span>
+    <span class="var">lower_line</span> = <span class="var">line</span>.<span class="fn">lower</span>()
+
+    <span class="cm"># Print both versions to the screen</span>
+    <span class="fn">print</span>(<span class="str">"UPPER:"</span>, <span class="var">upper_line</span>)
+    <span class="fn">print</span>(<span class="str">"lower:"</span>, <span class="var">lower_line</span>)
+
+    <span class="cm"># Write the upper case version to the output file</span>
+    <span class="var">output_file</span>.<span class="fn">write</span>(<span class="var">upper_line</span> + <span class="str">"\n"</span>)
+
+<span class="cm"># --- STEP 4: Close both files ---</span>
+<span class="var">input_file</span>.<span class="fn">close</span>()
+<span class="var">output_file</span>.<span class="fn">close</span>()
+
+<span class="fn">print</span>(<span class="str">"\n✅ Done! Check your output.txt file."</span>)</pre>
+  </div>
+
+  <div class="section-title" style="margin-top:24px;">🔬 Now Experiment! <span class="pill">CHALLENGES</span></div>
+  <ul class="step-list">
+    <li><div class="step-num">1</div>Change line 22 so it writes the <b>lower case</b> version instead of upper case to the file.</li>
+    <li><div class="step-num">2</div>Add a <code style="font-family:var(--mono);color:var(--accent2);">print("---")</code> after the two print statements so each pair is separated by a line.</li>
+    <li><div class="step-num">3</div>What happens if you try <code style="font-family:var(--mono);color:var(--accent2);">line.UPPER()</code> instead of <code style="font-family:var(--mono);color:var(--accent2);">line.upper()</code>? Try it and note the error!</li>
+    <li><div class="step-num">4</div>Add a 3rd variable called <code style="font-family:var(--mono);color:var(--accent2);">title_line</code> using Python's <code style="font-family:var(--mono);color:var(--accent2);">.title()</code> — what does it do?</li>
+  </ul>
+</div>
+
+<!-- SECTION 3: FILL THE BLANKS -->
+<div class="section">
+  <hr class="divider">
+  <div class="section-title">✏️ Fill in the Blanks <span class="pill">ACTIVITY 3</span></div>
+  <p style="color:var(--muted);font-size:0.88rem;margin-bottom:16px;">Complete the code below by typing in the missing parts. Press <b>Check</b> when done.</p>
+
+  <div class="fill-area">
+<span class="cm"># Open the input file</span>
+<span class="var">my_file</span> = <input class="blank-input" id="b1" placeholder="open(..." style="width:160px;" data-ans='open("input.txt", "r")'><br>
+<br>
+<span class="kw">for</span> <span class="var">line</span> <span class="kw">in</span> <span class="var">my_file</span>:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">line</span> = <span class="var">line</span>.<input class="blank-input" id="b2" placeholder="strip..." style="width:90px;" data-ans="strip()">&nbsp;&nbsp;<span class="cm"># clean whitespace</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">result</span> = <span class="var">line</span>.<input class="blank-input" id="b3" placeholder="???()" style="width:90px;" data-ans="upper()">&nbsp;&nbsp;<span class="cm"># make ALL CAPS</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">print</span>(<span class="var">result</span>)<br>
+<br>
+<span class="var">my_file</span>.<input class="blank-input" id="b4" placeholder="???()" style="width:90px;" data-ans="close()">
+  </div>
+  <button class="check-btn" onclick="checkFill()">Check Answers</button>
+  <div class="fill-feedback" id="fill-fb"></div>
+</div>
+
+<!-- SECTION 4: QUIZ -->
+<div class="section">
+  <hr class="divider">
+  <div class="section-title">🧠 Quick Quiz <span class="pill">ACTIVITY 4</span></div>
+
+  <div class="quiz-card">
+    <div class="quiz-q">What does <code>"Hello World".upper()</code> return?</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="answer(this,'q1',false)">Hello World</div>
+      <div class="quiz-opt" onclick="answer(this,'q1',false)">hello world</div>
+      <div class="quiz-opt" onclick="answer(this,'q1',true)">HELLO WORLD</div>
+      <div class="quiz-opt" onclick="answer(this,'q1',false)">Hello WORLD</div>
+    </div>
+    <div class="quiz-feedback" id="fb-q1"></div>
+  </div>
+
+  <div class="quiz-card">
+    <div class="quiz-q">Which mode string do you use to <b>open a file for writing</b>?</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="answer(this,'q2',false)">"r"</div>
+      <div class="quiz-opt" onclick="answer(this,'q2',true)">"w"</div>
+      <div class="quiz-opt" onclick="answer(this,'q2',false)">"x"</div>
+      <div class="quiz-opt" onclick="answer(this,'q2',false)">"write"</div>
+    </div>
+    <div class="quiz-feedback" id="fb-q2"></div>
+  </div>
+
+  <div class="quiz-card">
+    <div class="quiz-q">If <code>name = "Python"</code>, what is the value of <code>name</code> after <code>name.lower()</code>?</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="answer(this,'q3',false)">"python"</div>
+      <div class="quiz-opt" onclick="answer(this,'q3',true)">"Python" — strings are immutable, lower() returns a new string</div>
+      <div class="quiz-opt" onclick="answer(this,'q3',false)">"PYTHON"</div>
+      <div class="quiz-opt" onclick="answer(this,'q3',false)">An error occurs</div>
+    </div>
+    <div class="quiz-feedback" id="fb-q3"></div>
+  </div>
+
+  <div class="quiz-card">
+    <div class="quiz-q">What is the purpose of <code>.strip()</code> when reading file lines?</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="answer(this,'q4',false)">It removes all vowels from the string</div>
+      <div class="quiz-opt" onclick="answer(this,'q4',true)">It removes whitespace and newline characters from both ends</div>
+      <div class="quiz-opt" onclick="answer(this,'q4',false)">It deletes the line from the file</div>
+      <div class="quiz-opt" onclick="answer(this,'q4',false)">It converts the line to a list</div>
+    </div>
+    <div class="quiz-feedback" id="fb-q4"></div>
+  </div>
+</div>
+
+<!-- SECTION 5: MEMORY GAME -->
+<div class="section">
+  <hr class="divider">
+  <div class="section-title">🎮 Memory Game <span class="pill">ACTIVITY 5</span></div>
+  <p style="color:var(--muted);font-size:0.88rem;margin-bottom:14px;">Match each function to its description. Click two cards to flip them!</p>
+  <div class="mem-stats"><span id="mem-moves">Moves: 0</span><span id="mem-pairs">Pairs: 0/4</span></div>
+  <div class="memory-grid" id="mem-grid"></div>
+  <button class="reset-btn" onclick="resetMemory()">↺ Reset Game</button>
+</div>
+
+<!-- NAV BOTTOM -->
+<div style="max-width:860px;margin:0 auto;padding:20px 24px 60px;display:flex;justify-content:space-between;">
+  <a href="index.html" style="color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:0.8rem;">← Back to Lessons</a>
+  <a href="lesson2.html" style="color:var(--accent);text-decoration:none;font-family:var(--mono);font-size:0.8rem;background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.3);padding:10px 20px;border-radius:8px;">Lesson 2: Length &amp; Indexing →</a>
+</div>
+
+<script>
+// ===================== MATCH GAME =====================
+let selectedTerm=null, selectedDef=null, matchCount=0;
+function resetMatch(){
+  matchCount=0;
+  document.getElementById('match-score').textContent='Matched: 0 / 5';
+  document.querySelectorAll('.match-item').forEach(el=>{
+    el.classList.remove('selected','matched','wrong-flash');
+  });
+  selectedTerm=null;selectedDef=null;
+}
+document.querySelectorAll('.match-item').forEach(el=>{
+  el.addEventListener('click',()=>{
+    if(el.classList.contains('matched'))return;
+    if(el.closest('#terms-col')){
+      document.querySelectorAll('#terms-col .match-item').forEach(e=>e.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedTerm=el;
+    } else {
+      document.querySelectorAll('#defs-col .match-item').forEach(e=>e.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedDef=el;
+    }
+    if(selectedTerm&&selectedDef){
+      if(selectedTerm.dataset.pair===selectedDef.dataset.pair){
+        selectedTerm.classList.add('matched');selectedDef.classList.add('matched');
+        matchCount++;
+        document.getElementById('match-score').textContent=`Matched: ${matchCount} / 5`;
+      } else {
+        [selectedTerm,selectedDef].forEach(e=>{e.classList.add('wrong-flash');setTimeout(()=>{e.classList.remove('selected','wrong-flash');},400);});
+      }
+      selectedTerm=null;selectedDef=null;
+    }
+  });
+});
+
+// ===================== FILL BLANKS =====================
+function checkFill(){
+  const blanks=[
+    {id:'b1',ans:'open("input.txt","r")',alt:["open('input.txt','r')","open('input.txt', 'r')","open(\"input.txt\", \"r\")"]},
+    {id:'b2',ans:'strip()',alt:['strip()']},
+    {id:'b3',ans:'upper()',alt:['upper()']},
+    {id:'b4',ans:'close()',alt:['close()']}
+  ];
+  let correct=0;
+  blanks.forEach(b=>{
+    const el=document.getElementById(b.id);
+    const val=el.value.trim().replace(/\s+/g,'');
+    const allAns=[b.ans,...(b.alt||[])].map(a=>a.replace(/\s+/g,''));
+    if(allAns.includes(val)){el.classList.add('correct');el.classList.remove('wrong');correct++;}
+    else{el.classList.add('wrong');el.classList.remove('correct');}
+  });
+  const fb=document.getElementById('fill-fb');
+  fb.textContent=correct===blanks.length?`✅ Perfect! All ${blanks.length} correct!`:`${correct}/${blanks.length} correct — check the highlighted boxes.`;
+  fb.style.color=correct===blanks.length?'var(--accent3)':'var(--accent)';
+}
+
+// ===================== QUIZ =====================
+const answered={};
+function answer(el,qid,correct){
+  if(answered[qid])return;
+  answered[qid]=true;
+  const opts=el.parentElement.querySelectorAll('.quiz-opt');
+  opts.forEach(o=>o.classList.add('disabled'));
+  el.classList.add(correct?'correct':'wrong');
+  if(!correct)opts.forEach(o=>{if(o.onclick&&o.onclick.toString().includes('true'))o.classList.add('correct');});
+  const fb=document.getElementById('fb-'+qid);
+  fb.classList.add('show',correct?'ok':'fail');
+  const msgs={
+    q1:{ok:'✅ Correct! .upper() converts every character to a capital letter.',fail:'❌ Not quite. .upper() makes EVERY letter a capital.'},
+    q2:{ok:'✅ Correct! "w" mode opens a file for writing (creates it if it doesn\'t exist).',fail:'❌ "r" is for reading. Use "w" for writing.'},
+    q3:{ok:'✅ Exactly right! Strings are immutable — .lower() returns a NEW string, it doesn\'t change the original variable.',fail:'❌ Strings are immutable! name is still "Python". You\'d need to write: name = name.lower()'},
+    q4:{ok:'✅ Correct! .strip() removes \\n newlines and spaces from both ends — very useful when reading files!',fail:'❌ .strip() removes whitespace/newlines from the start and end of the string.'}
+  };
+  fb.textContent=msgs[qid][correct?'ok':'fail'];
+}
+
+// ===================== MEMORY GAME =====================
+const memPairs=[
+  {fn:'open()',def:'Opens a file'},
+  {fn:'.upper()',def:'Makes ALL CAPS'},
+  {fn:'.lower()',def:'Makes all lowercase'},
+  {fn:'.close()',def:'Closes a file'},
+];
+let memCards=[], memFlipped=[], memMoves=0, memPairsFound=0;
+function buildMemory(){
+  const items=[...memPairs.map(p=>({text:p.fn,pair:p.fn,type:'fn'})),...memPairs.map(p=>({text:p.def,pair:p.fn,type:'def'}))];
+  items.sort(()=>Math.random()-0.5);
+  const grid=document.getElementById('mem-grid');
+  grid.innerHTML='';
+  memCards=[];memFlipped=[];memMoves=0;memPairsFound=0;
+  document.getElementById('mem-moves').textContent='Moves: 0';
+  document.getElementById('mem-pairs').textContent='Pairs: 0/4';
+  items.forEach((item,i)=>{
+    const card=document.createElement('div');
+    card.className='mem-card';
+    card.setAttribute('data-front',item.text);
+    card.dataset.pair=item.pair;
+    card.addEventListener('click',()=>flipCard(card));
+    grid.appendChild(card);
+    memCards.push(card);
+  });
+}
+function flipCard(card){
+  if(card.classList.contains('flipped')||card.classList.contains('matched-m')||memFlipped.length===2)return;
+  card.classList.add('flipped');
+  memFlipped.push(card);
+  if(memFlipped.length===2){
+    memMoves++;
+    document.getElementById('mem-moves').textContent=`Moves: ${memMoves}`;
+    if(memFlipped[0].dataset.pair===memFlipped[1].dataset.pair&&memFlipped[0]!==memFlipped[1]){
+      memFlipped.forEach(c=>c.classList.add('matched-m'));
+      memPairsFound++;
+      document.getElementById('mem-pairs').textContent=`Pairs: ${memPairsFound}/4`;
+      memFlipped=[];
+    } else {
+      setTimeout(()=>{memFlipped.forEach(c=>c.classList.remove('flipped'));memFlipped=[];},900);
+    }
+  }
+}
+function resetMemory(){buildMemory();}
+buildMemory();
+
+// ===================== COPY =====================
+function copyCode(btn,id){
+  const pre=document.getElementById(id);
+  navigator.clipboard.writeText(pre.innerText).then(()=>{
+    btn.textContent='Copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},2000);
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 5 — Combining It All</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0f0e17;--card:#1a1828;--card2:#201e30;--accent:#c77dff;--accent2:#ff6b6b;--accent3:#6bcb77;--accent4:#ffd93d;--accent5:#4d96ff;--text:#fffffe;--muted:#a7a9be;--border:rgba(255,255,255,0.08);--mono:'Space Mono',monospace;--body:'Nunito',sans-serif;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 50% 20%,rgba(199,125,255,0.07),transparent 50%);pointer-events:none;}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(15,14,23,0.9);backdrop-filter:blur(12px);z-index:100;}
+  .nav-home,.nav-next{color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:0.75rem;transition:color 0.2s;}
+  .nav-home:hover{color:var(--text);}.nav-next:hover{color:var(--accent);}
+  .nav-lesson{font-family:var(--mono);font-size:0.75rem;color:var(--accent);letter-spacing:2px;}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px;}
+  .hero{padding:40px 0 20px;}
+  .lesson-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(199,125,255,0.12);border:1px solid rgba(199,125,255,0.3);color:var(--accent);font-family:var(--mono);font-size:0.72rem;padding:5px 14px;border-radius:20px;margin-bottom:18px;letter-spacing:1px;}
+  h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.15;margin-bottom:12px;}
+  h1 em{color:var(--accent);font-style:normal;}
+  .hero-sub{color:var(--muted);font-size:1rem;line-height:1.7;max-width:600px;}
+  .support-indicator{display:inline-flex;align-items:center;gap:8px;margin-top:18px;background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.25);border-radius:8px;padding:8px 16px;font-size:0.85rem;color:var(--accent2);}
+  .objectives{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px;margin-bottom:30px;}
+  .objectives h2{font-size:1rem;font-weight:800;margin-bottom:16px;}
+  .obj-list{list-style:none;display:flex;flex-direction:column;gap:10px;}
+  .obj-list li{display:flex;align-items:flex-start;gap:12px;font-size:0.9rem;color:var(--muted);line-height:1.5;}
+  .obj-check{width:20px;height:20px;border-radius:50%;background:rgba(199,125,255,0.15);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:0.65rem;color:var(--accent);}
+  .section-title{font-size:1.1rem;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+  .pill{font-family:var(--mono);font-size:0.65rem;background:rgba(199,125,255,0.15);color:var(--accent);padding:3px 10px;border-radius:20px;letter-spacing:1px;}
+  .info-box{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--accent5);border-radius:12px;padding:18px 22px;margin-bottom:16px;font-size:0.9rem;line-height:1.7;color:var(--muted);}
+  .info-box b{color:var(--text);}.info-box.green{border-left-color:var(--accent3);}.info-box.yellow{border-left-color:var(--accent4);}.info-box.red{border-left-color:var(--accent2);}.info-box.purple{border-left-color:var(--accent);}
+  .code-block{background:#0d0b1a;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;}
+  .code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(255,255,255,0.04);border-bottom:1px solid var(--border);}
+  .code-lang{font-family:var(--mono);font-size:0.65rem;color:var(--muted);letter-spacing:2px;}
+  .copy-btn{font-family:var(--mono);font-size:0.65rem;background:rgba(199,125,255,0.15);color:var(--accent);border:1px solid rgba(199,125,255,0.3);padding:4px 12px;border-radius:6px;cursor:pointer;transition:all 0.2s;}
+  pre{padding:20px;font-family:var(--mono);font-size:0.82rem;line-height:1.8;overflow-x:auto;color:#c9d1d9;}
+  .kw{color:#ff79c6;}.fn{color:#50fa7b;}.str{color:#f1fa8c;}.cm{color:#6272a4;font-style:italic;}.num{color:#bd93f9;}.var{color:#8be9fd;}
+  .divider{border:none;border-top:1px solid var(--border);margin:28px 0;}
+  /* TASK CARDS */
+  .task-card{background:var(--card);border:1px solid rgba(199,125,255,0.15);border-radius:14px;padding:26px;margin-bottom:16px;position:relative;}
+  .task-num{font-family:var(--mono);font-size:0.7rem;color:var(--accent);letter-spacing:2px;margin-bottom:10px;}
+  .task-card h3{font-size:1rem;font-weight:800;margin-bottom:10px;}
+  .task-card p{font-size:0.88rem;color:var(--muted);line-height:1.7;margin-bottom:14px;}
+  .task-checks{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+  .task-check{display:flex;align-items:center;gap:10px;font-size:0.85rem;color:var(--muted);}
+  .task-check input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);cursor:pointer;}
+  .task-check label{cursor:pointer;}
+  .hint-btn{font-family:var(--mono);font-size:0.7rem;background:rgba(255,217,61,0.1);color:var(--accent4);border:1px solid rgba(255,217,61,0.3);padding:5px 14px;border-radius:6px;cursor:pointer;margin-right:8px;margin-bottom:6px;display:inline-block;}
+  .hint-box{background:rgba(255,217,61,0.06);border:1px solid rgba(255,217,61,0.2);border-radius:8px;padding:12px 16px;margin-top:8px;font-size:0.85rem;color:var(--muted);display:none;}
+  .hint-box.show{display:block;}
+  .hint-box code{font-family:var(--mono);color:var(--accent4);}
+  /* REFERENCE CARD */
+  .ref-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:20px;}
+  .ref-item{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px;}
+  .ref-fn{font-family:var(--mono);font-size:0.78rem;color:var(--accent);margin-bottom:6px;}
+  .ref-desc{font-size:0.78rem;color:var(--muted);line-height:1.5;}
+  /* BUG */
+  .bug-mark{background:rgba(255,107,107,0.2);border-bottom:2px dashed var(--accent2);color:var(--accent2);cursor:pointer;border-radius:3px;padding:1px 3px;}
+  .bug-fixed{background:rgba(199,125,255,0.15);border-bottom:2px solid var(--accent);color:var(--accent);border-radius:3px;padding:1px 3px;}
+  .bug-reveal-btn{font-family:var(--mono);font-size:0.72rem;background:rgba(255,107,107,0.1);color:var(--accent2);border:1px solid rgba(255,107,107,0.3);padding:7px 16px;border-radius:7px;cursor:pointer;}
+  /* QUIZ */
+  .quiz-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:14px;}
+  .quiz-q{font-weight:700;font-size:0.95rem;margin-bottom:14px;line-height:1.5;}
+  .quiz-q code{font-family:var(--mono);background:rgba(255,255,255,0.07);padding:2px 7px;border-radius:4px;font-size:0.85em;color:var(--accent);}
+  .quiz-options{display:flex;flex-direction:column;gap:8px;}
+  .quiz-opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;border:1px solid var(--border);cursor:pointer;font-size:0.88rem;transition:all 0.2s;background:var(--card2);}
+  .quiz-opt:hover{border-color:rgba(199,125,255,0.4);background:rgba(199,125,255,0.06);}
+  .quiz-opt.correct{border-color:var(--accent3);background:rgba(107,203,119,0.1);color:var(--accent3);}
+  .quiz-opt.wrong{border-color:var(--accent2);background:rgba(255,107,107,0.1);color:var(--accent2);}
+  .quiz-opt.disabled{pointer-events:none;opacity:0.5;}
+  .quiz-feedback{margin-top:10px;font-size:0.85rem;padding:8px 12px;border-radius:6px;display:none;}
+  .quiz-feedback.show{display:block;}
+  .quiz-feedback.ok{background:rgba(107,203,119,0.1);color:var(--accent3);}
+  .quiz-feedback.fail{background:rgba(255,107,107,0.1);color:var(--accent2);}
+  /* PROGRESS TRACKER */
+  .tracker{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:24px;}
+  .tracker h3{font-size:0.9rem;font-weight:700;margin-bottom:14px;color:var(--muted);}
+  .tracker-bar{height:8px;background:rgba(255,255,255,0.06);border-radius:10px;overflow:hidden;margin-bottom:8px;}
+  .tracker-fill{height:100%;background:linear-gradient(90deg,var(--accent),#ff6b6b);border-radius:10px;transition:width 0.4s;width:0%;}
+  .tracker-label{font-family:var(--mono);font-size:0.7rem;color:var(--muted);}
+  ::-webkit-scrollbar{width:6px;height:6px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-home">← All Lessons</a>
+  <span class="nav-lesson">LESSON 05</span>
+  <a href="lesson6.html" class="nav-next">Next →</a>
+</nav>
+
+<div class="wrap">
+<div class="hero">
+  <div class="lesson-badge">🔴 LESSON 05 · MOSTLY INDEPENDENT</div>
+  <h1><em>Combining</em> It All</h1>
+  <p class="hero-sub">Put all string functions together in one program. You write the code — only light hints available. The reference card below is your main support.</p>
+  <div class="support-indicator">🔴 You write the code — hints on request only</div>
+</div>
+
+<div class="objectives">
+  <h2>🎯 Learning Objectives</h2>
+  <ul class="obj-list">
+    <li><div class="obj-check">✓</div>Combine <code style="font-family:var(--mono);font-size:0.8em;color:var(--accent);">upper()</code>, <code style="font-family:var(--mono);font-size:0.8em;color:var(--accent);">lower()</code>, <code style="font-family:var(--mono);font-size:0.8em;color:var(--accent);">len()</code>, <code style="font-family:var(--mono);font-size:0.8em;color:var(--accent);">find()</code>, <code style="font-family:var(--mono);font-size:0.8em;color:var(--accent);">isalpha()</code>, <code style="font-family:var(--mono);font-size:0.8em;color:var(--accent);">isdigit()</code> in one program</li>
+    <li><div class="obj-check">✓</div>Apply string processing to a real file-based pipeline</li>
+    <li><div class="obj-check">✓</div>Write a complete, working Python program independently</li>
+    <li><div class="obj-check">✓</div>Debug your own code using error messages</li>
+  </ul>
+</div>
+
+<!-- PROGRESS TRACKER -->
+<div class="tracker">
+  <h3>✅ Task Completion Tracker</h3>
+  <div class="tracker-bar"><div class="tracker-fill" id="tracker-fill"></div></div>
+  <div class="tracker-label" id="tracker-label">0 / 5 tasks completed</div>
+</div>
+
+<!-- REFERENCE CARD -->
+<div class="section-title">📖 String Functions Reference <span class="pill">USE THIS!</span></div>
+<div class="ref-grid">
+  <div class="ref-item"><div class="ref-fn">s.upper()</div><div class="ref-desc">Returns string in ALL CAPS</div></div>
+  <div class="ref-item"><div class="ref-fn">s.lower()</div><div class="ref-desc">Returns string in all lowercase</div></div>
+  <div class="ref-item"><div class="ref-fn">len(s)</div><div class="ref-desc">Returns number of characters</div></div>
+  <div class="ref-item"><div class="ref-fn">s.find("x")</div><div class="ref-desc">Returns index of "x" or -1</div></div>
+  <div class="ref-item"><div class="ref-fn">s[0]</div><div class="ref-desc">First character (index 0)</div></div>
+  <div class="ref-item"><div class="ref-fn">s[-1]</div><div class="ref-desc">Last character</div></div>
+  <div class="ref-item"><div class="ref-fn">s[0:3]</div><div class="ref-desc">Characters at index 0, 1, 2</div></div>
+  <div class="ref-item"><div class="ref-fn">s.isalpha()</div><div class="ref-desc">True if ALL letters</div></div>
+  <div class="ref-item"><div class="ref-fn">s.isdigit()</div><div class="ref-desc">True if ALL digits</div></div>
+  <div class="ref-item"><div class="ref-fn">s.isspace()</div><div class="ref-desc">True if all whitespace</div></div>
+  <div class="ref-item"><div class="ref-fn">"x" in s</div><div class="ref-desc">True if "x" is in s</div></div>
+  <div class="ref-item"><div class="ref-fn">s.strip()</div><div class="ref-desc">Remove leading/trailing whitespace</div></div>
+</div>
+
+<hr class="divider">
+
+<!-- TASK 1 -->
+<div class="section-title">💻 Coding Tasks <span class="pill">WRITE YOUR OWN</span></div>
+
+<div class="info-box green">
+  <b>📁 input.txt for this lesson:</b><br>
+  Create a file with a mix of lines — some short, some with numbers, some with keywords like "Python" and "Jersey". At least 8 lines. No starter code is given — you write it all!
+</div>
+
+<div class="task-card">
+  <div class="task-num">TASK 01</div>
+  <h3>📊 Line Statistics</h3>
+  <p>Write a program that reads every line and writes to <code style="font-family:var(--mono)">output.txt</code> a report showing each line's: original text, length, first character, last character, and an uppercase version. Format it clearly.</p>
+  <div class="task-checks">
+    <div class="task-check"><input type="checkbox" id="t1a" onchange="updateTracker()"><label for="t1a">Opens input.txt and output.txt correctly</label></div>
+    <div class="task-check"><input type="checkbox" id="t1b" onchange="updateTracker()"><label for="t1b">Uses len(), [0], [-1], and .upper() on each line</label></div>
+    <div class="task-check"><input type="checkbox" id="t1c" onchange="updateTracker()"><label for="t1c">Writes formatted results to output.txt</label></div>
+    <div class="task-check"><input type="checkbox" id="t1d" onchange="updateTracker()"><label for="t1d">Closes both files at the end</label></div>
+  </div>
+  <button class="hint-btn" onclick="toggleHint('h1a')">💡 Hint: f-strings</button>
+  <div class="hint-box" id="h1a">Use an f-string: <code>output_file.write(f"Line: {line} | Len: {len(line)} | First: {line[0]}\n")</code></div>
+  <button class="hint-btn" onclick="toggleHint('h1b')">💡 Hint: structure</button>
+  <div class="hint-box" id="h1b">Structure: open both files → for line in input: strip, process, write → close both</div>
+</div>
+
+<div class="task-card">
+  <div class="task-num">TASK 02</div>
+  <h3>🔍 Keyword Search</h3>
+  <p>Extend your program (or write a new one) that searches each line for a keyword that the user types. Only write lines containing that keyword to output.txt. Print how many matches were found. Make the search case-insensitive.</p>
+  <div class="task-checks">
+    <div class="task-check"><input type="checkbox" id="t2a" onchange="updateTracker()"><label for="t2a">Uses input() to get the keyword from the user</label></div>
+    <div class="task-check"><input type="checkbox" id="t2b" onchange="updateTracker()"><label for="t2b">Converts both line and keyword to lower before comparing</label></div>
+    <div class="task-check"><input type="checkbox" id="t2c" onchange="updateTracker()"><label for="t2c">Counts and prints the number of matching lines</label></div>
+  </div>
+  <button class="hint-btn" onclick="toggleHint('h2a')">💡 Hint: case insensitive</button>
+  <div class="hint-box" id="h2a">Convert both: <code>if keyword.lower() in line.lower():</code></div>
+</div>
+
+<div class="task-card">
+  <div class="task-num">TASK 03</div>
+  <h3>📈 Character Analyser</h3>
+  <p>Write a program that reads the file and for each line counts: number of letters, number of digits, number of spaces. Write a summary line to output.txt for each line. At the end print totals across the whole file.</p>
+  <div class="task-checks">
+    <div class="task-check"><input type="checkbox" id="t3a" onchange="updateTracker()"><label for="t3a">Uses a for ch in line inner loop</label></div>
+    <div class="task-check"><input type="checkbox" id="t3b" onchange="updateTracker()"><label for="t3b">Uses isalpha(), isdigit(), isspace() correctly</label></div>
+    <div class="task-check"><input type="checkbox" id="t3c" onchange="updateTracker()"><label for="t3c">Prints grand totals at the end</label></div>
+  </div>
+  <button class="hint-btn" onclick="toggleHint('h3a')">💡 Hint: running totals</button>
+  <div class="hint-box" id="h3a">Before the outer for loop, set: <code>total_letters = 0</code>, then inside the loop add: <code>total_letters += letters</code></div>
+</div>
+
+<hr class="divider">
+
+<!-- BUG FIX (hardest yet) -->
+<div class="section-title">🐛 Fix the Bugs <span class="pill">ACTIVITY 4 — NO HINTS</span></div>
+<p style="color:var(--muted);font-size:0.88rem;margin-bottom:14px;">This code has <b style="color:var(--accent2)">5 bugs</b>. Find them all — no clue which lines they're on this time. Click underlined text to fix.</p>
+<div style="background:#0d0b1a;border:1px solid rgba(255,107,107,0.2);border-radius:12px;padding:20px;font-family:var(--mono);font-size:0.82rem;line-height:1.8;color:#c9d1d9;margin-bottom:12px;">
+input_file  = open("input.txt", <span class="bug-mark" data-fix='"r"' data-explain='"r" is for reading, "a" is for appending — wrong mode!'>"a"</span>)
+output_file = open("output.txt", "w")
+total = 0
+
+for line in input_file:
+    line = line.<span class="bug-mark" data-fix='strip()' data-explain='strip() removes newlines — you need the brackets ()!'>strip</span>
+    letters = 0
+
+    for ch in line:
+        if ch.isalpha():
+            letters <span class="bug-mark" data-fix='+= 1' data-explain='+= 1 adds 1 to the counter. = 1 resets it to 1 every time!'>= 1</span>
+
+    total += letters
+
+    if letters <span class="bug-mark" data-fix='> 5' data-explain='> means greater than. >= 5 also works. < 5 would select short lines instead!'>&lt; 5</span>:
+        result = <span class="bug-mark" data-fix='line.upper()' data-explain='upper() must be called ON the string variable, not as a standalone function!'>upper(line)</span>
+        output_file.write(result + "\n")
+
+print("Total letters:", total)
+input_file.close()
+output_file.close()
+</div>
+<div style="margin-bottom:12px;font-size:0.82rem;color:var(--muted)" id="bug5-score">Bugs found: 0 / 5</div>
+<button class="bug-reveal-btn" onclick="revealAllBugs()">Show all fixes</button>
+
+<hr class="divider">
+
+<!-- QUIZ -->
+<div class="section-title">🧠 Stretch Quiz <span class="pill">ACTIVITY 5</span></div>
+<div class="quiz-card">
+  <div class="quiz-q">What is the output of this code?<br><code>s = "hello"<br>print(s[1:4].upper())</code></div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'q1',false)">"HELLO"</div>
+    <div class="quiz-opt" onclick="answer(this,'q1',true)">"ELL"</div>
+    <div class="quiz-opt" onclick="answer(this,'q1',false)">"ELO"</div>
+    <div class="quiz-opt" onclick="answer(this,'q1',false)">"ell"</div>
+  </div>
+  <div class="quiz-feedback" id="fb-q1"></div>
+</div>
+<div class="quiz-card">
+  <div class="quiz-q">Which line correctly counts digits in a string <code>s</code>?</div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'q2',false)">count = s.isdigit()</div>
+    <div class="quiz-opt" onclick="answer(this,'q2',false)">count = s.count(digit)</div>
+    <div class="quiz-opt" onclick="answer(this,'q2',true)">count = sum(1 for ch in s if ch.isdigit())</div>
+    <div class="quiz-opt" onclick="answer(this,'q2',false)">count = len(s.isdigit())</div>
+  </div>
+  <div class="quiz-feedback" id="fb-q2"></div>
+</div>
+<div class="quiz-card">
+  <div class="quiz-q">What does <code>"  hello  ".strip().upper()[0]</code> return?</div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'q3',false)">" "</div>
+    <div class="quiz-opt" onclick="answer(this,'q3',false)">"h"</div>
+    <div class="quiz-opt" onclick="answer(this,'q3',true)">"H"</div>
+    <div class="quiz-opt" onclick="answer(this,'q3',false)">An error</div>
+  </div>
+  <div class="quiz-feedback" id="fb-q3"></div>
+</div>
+
+<div style="display:flex;justify-content:space-between;padding:20px 0 60px;">
+  <a href="lesson4.html" style="color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:0.8rem;">← Lesson 4</a>
+  <a href="lesson6.html" style="color:var(--accent);text-decoration:none;font-family:var(--mono);font-size:0.8rem;background:rgba(199,125,255,0.1);border:1px solid rgba(199,125,255,0.3);padding:10px 20px;border-radius:8px;">Lesson 6: Final Challenge →</a>
+</div>
+</div>
+
+<script>
+function toggleHint(id){document.getElementById(id).classList.toggle('show');}
+
+function updateTracker(){
+  const boxes=document.querySelectorAll('.task-check input[type=checkbox]');
+  const done=[...boxes].filter(b=>b.checked).length;
+  const total=boxes.length;
+  const pct=Math.round(done/total*100);
+  document.getElementById('tracker-fill').style.width=pct+'%';
+  document.getElementById('tracker-label').textContent=`${done} / ${total} checks completed`;
+}
+
+let bugsFound=0;
+document.querySelectorAll('.bug-mark').forEach(el=>{
+  el.addEventListener('click',()=>{
+    if(el.classList.contains('bug-fixed'))return;
+    el.classList.remove('bug-mark');el.classList.add('bug-fixed');
+    el.textContent=el.dataset.fix;bugsFound++;
+    document.getElementById('bug5-score').textContent=`Bugs found: ${bugsFound} / 5`;
+  });
+});
+function revealAllBugs(){document.querySelectorAll('.bug-mark').forEach(el=>{if(!el.classList.contains('bug-fixed')){el.classList.remove('bug-mark');el.classList.add('bug-fixed');el.textContent=el.dataset.fix;bugsFound++;}});document.getElementById('bug5-score').textContent='Bugs found: 5 / 5';}
+
+const answered={};
+function answer(el,qid,correct){
+  if(answered[qid])return;answered[qid]=true;
+  el.parentElement.querySelectorAll('.quiz-opt').forEach(o=>o.classList.add('disabled'));
+  el.classList.add(correct?'correct':'wrong');
+  const fb=document.getElementById('fb-'+qid);
+  fb.classList.add('show',correct?'ok':'fail');
+  const msgs={
+    q1:{ok:'✅ s[1:4] gives "ell", then .upper() makes it "ELL".',fail:'❌ s[1:4] gives characters at index 1,2,3 = "ell". Then .upper() → "ELL".'},
+    q2:{ok:'✅ This uses a generator expression to count matching characters — efficient and Pythonic!',fail:'❌ The correct way is: sum(1 for ch in s if ch.isdigit()) — it counts each digit character.'},
+    q3:{ok:'✅ strip() removes spaces → "hello", upper() → "HELLO", [0] → "H".',fail:'❌ Step by step: strip() removes spaces → "hello", upper() → "HELLO", [0] → "H".'}
+  };
+  fb.textContent=msgs[qid][correct?'ok':'fail'];
+}
+</script>
+</body>
+</html>

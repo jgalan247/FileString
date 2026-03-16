@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 4 — Checking Characters</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0f0e17;--card:#1a1828;--card2:#201e30;--accent:#4d96ff;--accent2:#ff6b6b;--accent3:#6bcb77;--accent4:#ffd93d;--text:#fffffe;--muted:#a7a9be;--border:rgba(255,255,255,0.08);--mono:'Space Mono',monospace;--body:'Nunito',sans-serif;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 70% 30%,rgba(77,150,255,0.07),transparent 50%);pointer-events:none;}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(15,14,23,0.9);backdrop-filter:blur(12px);z-index:100;}
+  .nav-home,.nav-next{color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:0.75rem;transition:color 0.2s;}
+  .nav-home:hover{color:var(--text);}.nav-next:hover{color:var(--accent);}
+  .nav-lesson{font-family:var(--mono);font-size:0.75rem;color:var(--accent);letter-spacing:2px;}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px;}
+  .hero{padding:40px 0 20px;}
+  .lesson-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(77,150,255,0.12);border:1px solid rgba(77,150,255,0.3);color:var(--accent);font-family:var(--mono);font-size:0.72rem;padding:5px 14px;border-radius:20px;margin-bottom:18px;letter-spacing:1px;}
+  h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.15;margin-bottom:12px;}
+  h1 em{color:var(--accent);font-style:normal;}
+  .hero-sub{color:var(--muted);font-size:1rem;line-height:1.7;max-width:600px;}
+  .support-indicator{display:inline-flex;align-items:center;gap:8px;margin-top:18px;background:rgba(255,217,61,0.1);border:1px solid rgba(255,217,61,0.25);border-radius:8px;padding:8px 16px;font-size:0.85rem;color:var(--accent4);}
+  .objectives{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px;margin-bottom:30px;}
+  .objectives h2{font-size:1rem;font-weight:800;margin-bottom:16px;}
+  .obj-list{list-style:none;display:flex;flex-direction:column;gap:10px;}
+  .obj-list li{display:flex;align-items:flex-start;gap:12px;font-size:0.9rem;color:var(--muted);line-height:1.5;}
+  .obj-check{width:20px;height:20px;border-radius:50%;background:rgba(77,150,255,0.15);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:0.65rem;color:var(--accent);}
+  .section-title{font-size:1.1rem;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+  .pill{font-family:var(--mono);font-size:0.65rem;background:rgba(77,150,255,0.15);color:var(--accent);padding:3px 10px;border-radius:20px;letter-spacing:1px;}
+  .info-box{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:12px;padding:18px 22px;margin-bottom:16px;font-size:0.9rem;line-height:1.7;color:var(--muted);}
+  .info-box b{color:var(--text);}.info-box.green{border-left-color:var(--accent3);}.info-box.yellow{border-left-color:var(--accent4);}.info-box.red{border-left-color:var(--accent2);}
+  .divider{border:none;border-top:1px solid var(--border);margin:28px 0;}
+  pre{padding:20px;font-family:var(--mono);font-size:0.82rem;line-height:1.8;overflow-x:auto;color:#c9d1d9;}
+  .kw{color:#ff79c6;}.fn{color:#50fa7b;}.str{color:#f1fa8c;}.cm{color:#6272a4;font-style:italic;}.num{color:#bd93f9;}.var{color:#8be9fd;}
+  /* CHAR TESTER */
+  .char-tester{background:var(--card);border-radius:14px;padding:24px;margin-bottom:20px;}
+  .char-tester h3{font-family:var(--mono);font-size:0.85rem;color:var(--muted);margin-bottom:14px;}
+  .ct-input{background:rgba(255,255,255,0.07);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:1.1rem;padding:10px 16px;border-radius:8px;width:100%;outline:none;margin-bottom:16px;}
+  .ct-input:focus{border-color:var(--accent);}
+  .ct-results{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;}
+  .ct-item{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;}
+  .ct-fn{font-family:var(--mono);font-size:0.75rem;color:var(--muted);margin-bottom:6px;}
+  .ct-val{font-family:var(--mono);font-size:1rem;font-weight:700;}
+  .ct-val.t{color:var(--accent3);}
+  .ct-val.f{color:var(--accent2);}
+  /* CHAR-BY-CHAR VIS */
+  .cbc-wrap{background:var(--card);border-radius:14px;padding:24px;margin-bottom:20px;}
+  .cbc-word{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+  .cbc-ch{width:44px;height:44px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.9rem;border:1px solid var(--border);}
+  .cbc-ch.alpha{background:rgba(107,203,119,0.15);border-color:var(--accent3);color:var(--accent3);}
+  .cbc-ch.digit{background:rgba(77,150,255,0.15);border-color:var(--accent);color:var(--accent);}
+  .cbc-ch.space{background:rgba(255,217,61,0.1);border-color:var(--accent4);color:var(--accent4);}
+  .cbc-ch.other{background:rgba(255,107,107,0.1);border-color:var(--accent2);color:var(--accent2);}
+  .cbc-label{font-size:0.5rem;margin-top:2px;}
+  .cbc-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:0.78rem;}
+  .cbc-dot{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:4px;}
+  /* FILL */
+  .fill-area{background:#0d0b1a;border:1px solid var(--border);border-radius:12px;padding:20px;font-family:var(--mono);font-size:0.82rem;line-height:2.2;}
+  .blank-input{display:inline-block;min-width:80px;background:rgba(77,150,255,0.1);border:none;border-bottom:2px solid rgba(77,150,255,0.4);color:var(--accent);font-family:var(--mono);font-size:0.82rem;padding:0 6px;outline:none;text-align:center;}
+  .blank-input.correct{border-bottom-color:var(--accent3);color:var(--accent3);}
+  .blank-input.wrong{border-bottom-color:var(--accent2);color:var(--accent2);}
+  .check-btn{font-family:var(--mono);font-size:0.75rem;background:rgba(77,150,255,0.15);color:var(--accent);border:1px solid rgba(77,150,255,0.3);padding:8px 20px;border-radius:8px;cursor:pointer;margin-top:14px;transition:all 0.2s;display:block;}
+  .check-btn:hover{background:rgba(77,150,255,0.25);}
+  /* BUG */
+  .bug-mark{background:rgba(255,107,107,0.2);border-bottom:2px dashed var(--accent2);color:var(--accent2);cursor:pointer;border-radius:3px;padding:1px 3px;}
+  .bug-fixed{background:rgba(107,203,119,0.15);border-bottom:2px solid var(--accent3);color:var(--accent3);border-radius:3px;padding:1px 3px;}
+  .bug-reveal-btn{font-family:var(--mono);font-size:0.72rem;background:rgba(255,107,107,0.1);color:var(--accent2);border:1px solid rgba(255,107,107,0.3);padding:7px 16px;border-radius:7px;cursor:pointer;}
+  /* QUIZ */
+  .quiz-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:14px;}
+  .quiz-q{font-weight:700;font-size:0.95rem;margin-bottom:14px;line-height:1.5;}
+  .quiz-q code{font-family:var(--mono);background:rgba(255,255,255,0.07);padding:2px 7px;border-radius:4px;font-size:0.85em;color:var(--accent);}
+  .quiz-options{display:flex;flex-direction:column;gap:8px;}
+  .quiz-opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;border:1px solid var(--border);cursor:pointer;font-size:0.88rem;transition:all 0.2s;background:var(--card2);}
+  .quiz-opt:hover{border-color:rgba(77,150,255,0.4);background:rgba(77,150,255,0.06);}
+  .quiz-opt.correct{border-color:var(--accent3);background:rgba(107,203,119,0.1);color:var(--accent3);}
+  .quiz-opt.wrong{border-color:var(--accent2);background:rgba(255,107,107,0.1);color:var(--accent2);}
+  .quiz-opt.disabled{pointer-events:none;opacity:0.5;}
+  .quiz-feedback{margin-top:10px;font-size:0.85rem;padding:8px 12px;border-radius:6px;display:none;}
+  .quiz-feedback.show{display:block;}
+  .quiz-feedback.ok{background:rgba(107,203,119,0.1);color:var(--accent3);}
+  .quiz-feedback.fail{background:rgba(255,107,107,0.1);color:var(--accent2);}
+  /* WRITE OWN */
+  .write-task{background:var(--card);border:1px solid rgba(77,150,255,0.2);border-radius:14px;padding:24px;margin-bottom:16px;}
+  .write-task h3{font-size:1rem;font-weight:800;margin-bottom:10px;color:var(--accent);}
+  .write-task p{font-size:0.88rem;color:var(--muted);line-height:1.7;margin-bottom:14px;}
+  .hint-btn{font-family:var(--mono);font-size:0.7rem;background:rgba(255,217,61,0.1);color:var(--accent4);border:1px solid rgba(255,217,61,0.3);padding:5px 14px;border-radius:6px;cursor:pointer;margin-bottom:6px;display:inline-block;}
+  .hint-box{background:rgba(255,217,61,0.06);border:1px solid rgba(255,217,61,0.2);border-radius:8px;padding:12px 16px;margin-top:8px;font-size:0.85rem;color:var(--muted);display:none;}
+  .hint-box.show{display:block;}
+  ::-webkit-scrollbar{width:6px;height:6px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-home">← All Lessons</a>
+  <span class="nav-lesson">LESSON 04</span>
+  <a href="lesson5.html" class="nav-next">Next →</a>
+</nav>
+
+<div class="wrap">
+<div class="hero">
+  <div class="lesson-badge">🟡 LESSON 04 · LESS SCAFFOLDING</div>
+  <h1>Checking <em>Characters</em></h1>
+  <p class="hero-sub">Use <code style="font-family:var(--mono);color:var(--accent);">isalpha()</code>, <code style="font-family:var(--mono);color:var(--accent);">isdigit()</code>, and <code style="font-family:var(--mono);color:var(--accent);">isspace()</code> to inspect strings character-by-character. You write more this time!</p>
+  <div class="support-indicator">🟡 Less scaffolding — write from hints only, fix trickier bugs</div>
+</div>
+
+<div class="objectives">
+  <h2>🎯 Learning Objectives</h2>
+  <ul class="obj-list">
+    <li><div class="obj-check">✓</div>Use <code style="font-family:var(--mono);font-size:0.8em;color:var(--accent);">isalpha()</code> to check if a string contains only letters</li>
+    <li><div class="obj-check">✓</div>Use <code style="font-family:var(--mono);font-size:0.8em;color:var(--accent);">isdigit()</code> to check if a string contains only digits</li>
+    <li><div class="obj-check">✓</div>Use <code style="font-family:var(--mono);font-size:0.8em;color:var(--accent);">isspace()</code> to check for whitespace</li>
+    <li><div class="obj-check">✓</div>Loop through each character of a string using a <code style="font-family:var(--mono);font-size:0.8em;color:var(--accent);">for</code> loop</li>
+    <li><div class="obj-check">✓</div>Count different types of characters and write results to a file</li>
+  </ul>
+</div>
+
+<!-- CHAR TESTER -->
+<div class="section-title">🧪 Character Tester <span class="pill">ACTIVITY 1</span></div>
+<p style="color:var(--muted);font-size:0.88rem;margin-bottom:14px;">Type any character or word to see what the three functions return!</p>
+<div class="char-tester">
+  <h3>Try a character or string:</h3>
+  <input class="ct-input" id="ct-in" value="Hello123" oninput="updateTester()" placeholder="Type here...">
+  <div class="ct-results">
+    <div class="ct-item"><div class="ct-fn">.isalpha()</div><div class="ct-val" id="ct-alpha">-</div></div>
+    <div class="ct-item"><div class="ct-fn">.isdigit()</div><div class="ct-val" id="ct-digit">-</div></div>
+    <div class="ct-item"><div class="ct-fn">.isspace()</div><div class="ct-val" id="ct-space">-</div></div>
+    <div class="ct-item"><div class="ct-fn">.isalnum()</div><div class="ct-val" id="ct-alnum">-</div></div>
+  </div>
+</div>
+
+<!-- CHAR BY CHAR VIS -->
+<div class="section-title">🔬 Character-by-Character Viewer <span class="pill">ACTIVITY 2</span></div>
+<p style="color:var(--muted);font-size:0.88rem;margin-bottom:14px;">See how Python classifies each character in a string. Each box is one character.</p>
+<div class="cbc-wrap">
+  <input class="ct-input" id="cbc-in" value="Hello World 42!" oninput="updateCBC()" placeholder="Type a string...">
+  <div class="cbc-word" id="cbc-display"></div>
+  <div class="cbc-legend">
+    <span><div class="cbc-dot" style="background:rgba(107,203,119,0.5)"></div>Letter (isalpha)</span>
+    <span><div class="cbc-dot" style="background:rgba(77,150,255,0.5)"></div>Digit (isdigit)</span>
+    <span><div class="cbc-dot" style="background:rgba(255,217,61,0.3)"></div>Space (isspace)</span>
+    <span><div class="cbc-dot" style="background:rgba(255,107,107,0.3)"></div>Other</span>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- FILL GAPS -->
+<div class="section-title">✏️ Fill in the Gaps <span class="pill">ACTIVITY 3</span></div>
+<p style="color:var(--muted);font-size:0.88rem;margin-bottom:14px;">Complete this program that counts letters, digits, and spaces in each line.</p>
+<div class="fill-area">
+<span class="kw">for</span> <span class="var">line</span> <span class="kw">in</span> <span class="var">input_file</span>:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">line</span> = <span class="var">line</span>.<span class="fn">strip</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">letters</span> = <span class="num">0</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">digits</span> = <span class="num">0</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">spaces</span> = <span class="num">0</span><br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> <span class="var">ch</span> <span class="kw">in</span> <input class="blank-input" id="b1" style="width:55px" data-ans="line">:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> <span class="var">ch</span>.<input class="blank-input" id="b2" style="width:90px" data-ans="isalpha()">:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">letters</span> <input class="blank-input" id="b3" style="width:50px" data-ans="+="> <span class="num">1</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">elif</span> <span class="var">ch</span>.<input class="blank-input" id="b4" style="width:90px" data-ans="isdigit()">:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">digits</span> += <span class="num">1</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">elif</span> <span class="var">ch</span>.<input class="blank-input" id="b5" style="width:90px" data-ans="isspace()">:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">spaces</span> += <span class="num">1</span><br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">print</span>(<span class="str">f"Letters:{<span class="var">letters</span>} Digits:{<span class="var">digits</span>} Spaces:{<span class="var">spaces</span>}"</span>)
+</div>
+<button class="check-btn" onclick="checkFill()">Check Answers</button>
+<div style="margin-top:10px;font-size:0.85rem;color:var(--muted)" id="fill-fb"></div>
+
+<hr class="divider">
+
+<!-- BUG FIX (harder) -->
+<div class="section-title">🐛 Fix the Bugs <span class="pill">ACTIVITY 4</span></div>
+<p style="color:var(--muted);font-size:0.88rem;margin-bottom:14px;">This code has <b style="color:var(--accent2)">4 bugs</b> — some are logic errors, not just syntax! Think carefully.</p>
+<div style="background:#0d0b1a;border:1px solid rgba(255,107,107,0.2);border-radius:12px;padding:20px;font-family:var(--mono);font-size:0.82rem;line-height:1.8;color:#c9d1d9;margin-bottom:12px;">
+for line in input_file:
+    line = line.strip()
+    count = 0
+    for ch in line:
+        if ch.<span class="bug-mark" data-fix="isdigit()" data-explain="isdigit() checks for digits 0-9. isalpha() checks for letters — these were swapped!">isalpha()</span>:
+            count += 1
+    if count <span class="bug-mark" data-fix="> 0" data-explain='> 0 means "at least one digit found". == 0 would only print when NO digits exist!'>== 0</span>:
+        print(f"{line} has {count} digit(s)")
+        output_file.write(line <span class="bug-mark" data-fix='+ "\\n"' data-explain='String concatenation needs +, not a comma. Comma is for print(), not write().'>, "\\n"</span>)
+
+input_file.<span class="bug-mark" data-fix="close()" data-explain="close() needs parentheses — it is a method call!">close</span>
+</div>
+<div style="margin-bottom:12px;font-size:0.82rem;color:var(--muted)" id="bug4-score">Bugs found: 0 / 4</div>
+<button class="bug-reveal-btn" onclick="revealAllBugs()">Show all fixes</button>
+
+<hr class="divider">
+
+<!-- WRITE OWN -->
+<div class="section-title">🖊️ Write Your Own Code <span class="pill">ACTIVITY 5</span></div>
+<div class="write-task">
+  <h3>Task: Validate & Filter</h3>
+  <p>Write a program that reads <code style="font-family:var(--mono)">input.txt</code> and writes ONLY lines that contain at least one digit to <code style="font-family:var(--mono)">output.txt</code>. Also print the total count of digits found across ALL lines.</p>
+  <div style="margin-bottom:10px">
+    <button class="hint-btn" onclick="toggleHint('h1')">💡 Hint 1: structure</button>
+  </div>
+  <div class="hint-box" id="h1">You need two loops: an outer <code style="font-family:var(--mono)">for line in file</code> and an inner <code style="font-family:var(--mono)">for ch in line</code>. Keep a running total outside the outer loop.</div>
+  <div style="margin-bottom:10px">
+    <button class="hint-btn" onclick="toggleHint('h2')">💡 Hint 2: checking</button>
+  </div>
+  <div class="hint-box" id="h2">Use <code style="font-family:var(--mono)">ch.isdigit()</code> inside the inner loop. Set a flag variable (e.g. <code style="font-family:var(--mono)">has_digit = False</code>) and set it True when you find one.</div>
+</div>
+
+<!-- QUIZ -->
+<div class="section-title">🧠 Quick Quiz <span class="pill">ACTIVITY 6</span></div>
+<div class="quiz-card">
+  <div class="quiz-q">What does <code>"abc123".isalpha()</code> return?</div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'q1',false)">True</div>
+    <div class="quiz-opt" onclick="answer(this,'q1',true)">False — it contains digits too</div>
+    <div class="quiz-opt" onclick="answer(this,'q1',false)">3</div>
+    <div class="quiz-opt" onclick="answer(this,'q1',false)">An error</div>
+  </div>
+  <div class="quiz-feedback" id="fb-q1"></div>
+</div>
+<div class="quiz-card">
+  <div class="quiz-q">If <code>ch = "7"</code>, which returns <code>True</code>?</div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'q2',false)">ch.isalpha()</div>
+    <div class="quiz-opt" onclick="answer(this,'q2',true)">ch.isdigit()</div>
+    <div class="quiz-opt" onclick="answer(this,'q2',false)">ch.isspace()</div>
+    <div class="quiz-opt" onclick="answer(this,'q2',false)">None of them</div>
+  </div>
+  <div class="quiz-feedback" id="fb-q2"></div>
+</div>
+<div class="quiz-card">
+  <div class="quiz-q">How do you loop through each character in a string called <code>word</code>?</div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'q3',false)">for i in len(word):</div>
+    <div class="quiz-opt" onclick="answer(this,'q3',true)">for ch in word:</div>
+    <div class="quiz-opt" onclick="answer(this,'q3',false)">for ch in word.split():</div>
+    <div class="quiz-opt" onclick="answer(this,'q3',false)">while word:</div>
+  </div>
+  <div class="quiz-feedback" id="fb-q3"></div>
+</div>
+<div class="quiz-card">
+  <div class="quiz-q">What does <code>" ".isspace()</code> return?</div>
+  <div class="quiz-options">
+    <div class="quiz-opt" onclick="answer(this,'q4',false)">False</div>
+    <div class="quiz-opt" onclick="answer(this,'q4',true)">True</div>
+    <div class="quiz-opt" onclick="answer(this,'q4',false)">1</div>
+    <div class="quiz-opt" onclick="answer(this,'q4',false)">None</div>
+  </div>
+  <div class="quiz-feedback" id="fb-q4"></div>
+</div>
+
+<div style="display:flex;justify-content:space-between;padding:20px 0 60px;">
+  <a href="lesson3.html" style="color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:0.8rem;">← Lesson 3</a>
+  <a href="lesson5.html" style="color:var(--accent);text-decoration:none;font-family:var(--mono);font-size:0.8rem;background:rgba(77,150,255,0.1);border:1px solid rgba(77,150,255,0.3);padding:10px 20px;border-radius:8px;">Lesson 5: Combining It All →</a>
+</div>
+</div>
+
+<script>
+function updateTester(){
+  const s=document.getElementById('ct-in').value;
+  if(!s){return;}
+  const setVal=(id,val)=>{const el=document.getElementById(id);el.textContent=val?'True':'False';el.className='ct-val '+(val?'t':'f');};
+  setVal('ct-alpha',s.split('').every(c=>/[a-zA-Z]/.test(c)));
+  setVal('ct-digit',s.split('').every(c=>/[0-9]/.test(c)));
+  setVal('ct-space',s.split('').every(c=>/\s/.test(c)));
+  setVal('ct-alnum',s.split('').every(c=>/[a-zA-Z0-9]/.test(c)));
+}
+updateTester();
+function updateCBC(){
+  const s=document.getElementById('cbc-in').value;
+  const wrap=document.getElementById('cbc-display');
+  wrap.innerHTML='';
+  s.split('').forEach(ch=>{
+    const d=document.createElement('div');
+    d.className='cbc-ch';
+    let cls='other',lbl='other';
+    if(/[a-zA-Z]/.test(ch)){cls='alpha';lbl='alpha';}
+    else if(/[0-9]/.test(ch)){cls='digit';lbl='digit';}
+    else if(/\s/.test(ch)){cls='space';lbl='space';}
+    d.classList.add(cls);
+    d.innerHTML=`${ch===' '?'␣':ch}<span class="cbc-label">${lbl}</span>`;
+    wrap.appendChild(d);
+  });
+}
+updateCBC();
+
+function checkFill(){
+  const blanks=[
+    {id:'b1',ans:'line'},{id:'b2',ans:'isalpha()'},{id:'b3',ans:'+='},{id:'b4',ans:'isdigit()'},{id:'b5',ans:'isspace()'}
+  ];
+  let correct=0;
+  blanks.forEach(b=>{
+    const el=document.getElementById(b.id);
+    const val=el.value.trim().replace(/\s/g,'');
+    if(val===b.ans.replace(/\s/g,'')){el.classList.add('correct');el.classList.remove('wrong');correct++;}
+    else{el.classList.add('wrong');el.classList.remove('correct');}
+  });
+  document.getElementById('fill-fb').textContent=correct===5?'✅ Perfect! All 5 correct!':correct+'/5 correct.';
+}
+
+let bugsFound=0;
+document.querySelectorAll('.bug-mark').forEach(el=>{
+  el.addEventListener('click',()=>{
+    if(el.classList.contains('bug-fixed'))return;
+    el.classList.remove('bug-mark');el.classList.add('bug-fixed');
+    el.textContent=el.dataset.fix;bugsFound++;
+    document.getElementById('bug4-score').textContent=`Bugs found: ${bugsFound} / 4`;
+  });
+});
+function revealAllBugs(){document.querySelectorAll('.bug-mark').forEach(el=>{el.classList.remove('bug-mark');el.classList.add('bug-fixed');el.textContent=el.dataset.fix;bugsFound++;});document.getElementById('bug4-score').textContent='Bugs found: 4 / 4';}
+
+function toggleHint(id){document.getElementById(id).classList.toggle('show');}
+
+const answered={};
+function answer(el,qid,correct){
+  if(answered[qid])return;answered[qid]=true;
+  el.parentElement.querySelectorAll('.quiz-opt').forEach(o=>o.classList.add('disabled'));
+  el.classList.add(correct?'correct':'wrong');
+  const fb=document.getElementById('fb-'+qid);
+  fb.classList.add('show',correct?'ok':'fail');
+  const msgs={
+    q1:{ok:'✅ Correct! isalpha() only returns True if ALL characters are letters.',fail:'❌ "abc123" contains digits too, so isalpha() returns False.'},
+    q2:{ok:'✅ "7" is a digit character — isdigit() returns True.',fail:'❌ "7" is a digit. isdigit() would return True for it.'},
+    q3:{ok:'✅ for ch in word: loops through each character one by one!',fail:'❌ Use: for ch in word: — this gives you each character in turn.'},
+    q4:{ok:'✅ A single space character is whitespace, so isspace() returns True.',fail:'❌ A space " " IS a space character — isspace() returns True.'}
+  };
+  fb.textContent=msgs[qid][correct?'ok':'fail'];
+}
+</script>
+</body>
+</html>
